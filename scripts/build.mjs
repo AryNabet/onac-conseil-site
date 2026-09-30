@@ -22,7 +22,13 @@ const SITE_NAME = 'ONAC Conseil';
 const esc = s => String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 const MONTHS = ['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'];
 const frDate = d => { const [y, m, j] = d.split('-').map(Number); return `${j} ${MONTHS[m - 1]} ${y}`; };
-const today = new Date().toISOString().slice(0, 10);
+// Heure de publication (heure de Paris) : un article daté du jour J n'apparaît qu'à partir de J à cette heure.
+// Mardi 8h30 = créneau où les dirigeants lisent le plus LinkedIn en semaine.
+const PUBLISH_TIME = '08:30';
+const parisNow = new Intl.DateTimeFormat('sv-SE', {
+  timeZone: 'Europe/Paris', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit',
+}).format(new Date()).replace(' ', 'T');            // ex. 2026-10-06T08:31
+const isPublished = a => `${a.date}T${a.time || PUBLISH_TIME}` <= parisNow;
 
 function copyDir(from, to) {
   fs.mkdirSync(to, { recursive: true });
@@ -105,7 +111,7 @@ const files = fs.existsSync(CONTENT) ? fs.readdirSync(CONTENT).filter(f => f.end
 const all = files.map(f => parse(path.join(CONTENT, f)));
 const slugs = new Set();
 for (const a of all) { if (slugs.has(a.slug)) throw new Error(`slug en double : ${a.slug}`); slugs.add(a.slug); }
-const posts = all.filter(a => a.date <= today).sort((a, b) => b.date.localeCompare(a.date));
+const posts = all.filter(isPublished).sort((a, b) => b.date.localeCompare(a.date));
 
 // Pages articles
 for (const a of posts) {

@@ -40,7 +40,8 @@ Le build génère : l'accueil avec les 3 derniers articles, `/blog/`, une page p
 - **Corriger un article** : modifier le fichier dans `content/blog/` (directement sur GitHub,
   bouton crayon) ; la mise en ligne est automatique.
 - **Programmer un article** : mettre une date future dans son en-tête ; il sera publié ce jour-là
-  (le déploiement tourne aussi chaque matin).
+  à 8h30 heure de Paris. Pour une autre heure, ajouter `time: 12:15` dans l'en-tête (la mise en
+  ligne automatique ne passe qu'à 8h32 : pour une autre heure, lancer « Run workflow » à la main).
 - **Retirer un article** : supprimer son fichier. Attention, le déploiement n'efface rien sur le
   serveur : supprimer aussi le dossier `blog/<slug>/` sur Gandi via Cyberduck.
 

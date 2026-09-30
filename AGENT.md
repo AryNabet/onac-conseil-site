@@ -55,8 +55,10 @@ Un expert-comptable engage sa responsabilité sur ce qu'il publie.
 
 ## Format de l'article
 
-Fichier : `content/blog/AAAA-MM-JJ-slug-court.md` (date = date de publication prévue, en
-général le lundi suivant ; slug en minuscules, sans accents, mots séparés par des tirets).
+Fichier : `content/blog/AAAA-MM-JJ-slug-court.md`. La date est celle de publication : **le mardi
+qui suit** la rédaction. L'article et le post LinkedIn partent automatiquement ce jour-là à
+**8h30 (heure de Paris)**, le créneau où les dirigeants lisent le plus LinkedIn. Slug en
+minuscules, sans accents, mots séparés par des tirets.
 
 ```markdown
 ---

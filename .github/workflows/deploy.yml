@@ -1,12 +1,15 @@
 name: Mise en ligne sur Gandi
 
 # À chaque fusion sur main (article validé), le site est reconstruit et envoyé sur l'hébergement Gandi.
-# Tourne aussi chaque matin à 7h (heure de Paris) pour publier les articles programmés à une date future.
+# Tourne aussi chaque matin pour publier à 8h30 (heure de Paris) l'article programmé ce jour-là (le mardi en général).
+# Deux horaires car GitHub est en UTC et Paris change d'heure (été UTC+2 / hiver UTC+1) :
+# le build ne publie un article qu'une fois 8h30 passé à Paris, l'autre passage ne change rien.
 on:
   push:
     branches: [main]
   schedule:
-    - cron: '0 5 * * *'
+    - cron: '32 6 * * *'   # 8h32 en été
+    - cron: '32 7 * * *'   # 8h32 en hiver
   workflow_dispatch:
 
 concurrency:
