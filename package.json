@@ -1,0 +1,13 @@
+{
+  "name": "onac-conseil-site",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Site et blog du cabinet ONAC Conseil (onac-conseil.fr)",
+  "scripts": {
+    "build": "node scripts/build.mjs"
+  },
+  "dependencies": {
+    "marked": "^12.0.2"
+  }
+}

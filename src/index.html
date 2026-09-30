@@ -1,0 +1,1742 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="ONAC Conseil — Cabinet d'expertise comptable indépendant à Paris. Accompagnement sur-mesure des dirigeants et entrepreneurs. Expert-Comptable inscrit à l'Ordre.">
+<title>ONAC Conseil – Expert-Comptable · Paris 8e</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --gold:        #B8953A;
+  --gold-light:  #D4AD58;
+  --gold-pale:   #F5EDD8;
+  --gold-line:   #E0C97A;
+  --gold-shine:  #FFE082;
+  --cream:       #FDFAF4;
+  --white:       #FFFFFF;
+  --ink:         #16140F;
+  --ink2:        #2A2620;
+  --stone:       #6B6355;
+  --stone-lt:    #A09480;
+  --border:      #E8E0D0;
+  --border-gold: #D4C08A;
+  --section-bg:  #F8F4EC;
+}
+
+html { scroll-behavior: smooth; }
+
+/* ── Custom scrollbar ───────────────────────────────────── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--ink); }
+::-webkit-scrollbar-thumb { background: var(--gold-line); border-radius: 0; }
+::-webkit-scrollbar-thumb:hover { background: var(--gold); }
+* { scrollbar-width: thin; scrollbar-color: var(--gold-line) var(--ink); }
+
+body {
+  background: var(--white);
+  color: var(--ink);
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 300;
+  line-height: 1.7;
+  overflow-x: hidden;
+  cursor: none;
+}
+
+/* ══════════════════════════════════════════════════════════
+   GLOBAL KEYFRAMES
+══════════════════════════════════════════════════════════ */
+@keyframes shimmer {
+  0%   { background-position: 0%   center; }
+  100% { background-position: 200% center; }
+}
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes lineUp { to { transform: translateY(0); } }
+@keyframes lineGrow { to { width: 32px; } }
+@keyframes loaderGrow { to { width: 120px; } }
+@keyframes rotateSlow { to { transform: rotate(360deg); } }
+@keyframes scrollLeft {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+/* ══════════════════════════════════════════════════════════
+   LOADER
+══════════════════════════════════════════════════════════ */
+#loader {
+  position: fixed; inset: 0; z-index: 10000;
+  background: var(--ink);
+  display: flex; align-items: center; justify-content: center;
+  flex-direction: column; gap: 0;
+  transition: opacity .9s ease, visibility .9s ease;
+}
+#loader.out { opacity: 0; visibility: hidden; pointer-events: none; }
+
+.loader-logo {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2.2rem; font-weight: 500;
+  color: rgba(255,255,255,.9); letter-spacing: .32em;
+  text-align: center;
+}
+.loader-logo span { color: var(--gold-line); font-weight: 300; }
+.loader-sub {
+  font-size: .58rem; letter-spacing: .45em; text-transform: uppercase;
+  color: rgba(255,255,255,.25); margin-top: .6rem; text-align: center;
+}
+.loader-line {
+  height: 1px; background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  width: 0; margin: 1.4rem auto 0;
+  animation: loaderGrow .8s ease forwards .3s;
+}
+
+/* ══════════════════════════════════════════════════════════
+   CURSOR
+══════════════════════════════════════════════════════════ */
+#cur-ring {
+  position: fixed; width: 38px; height: 38px;
+  border: 1px solid rgba(184,149,58,.6);
+  border-radius: 50%; pointer-events: none; z-index: 9999;
+  transform: translate(-50%,-50%);
+  transition: width .25s, height .25s, background .25s, border-color .25s;
+  will-change: left,top;
+}
+#cur-dot {
+  position: fixed; width: 5px; height: 5px;
+  background: var(--gold); border-radius: 50%;
+  pointer-events: none; z-index: 9999;
+  transform: translate(-50%,-50%);
+  will-change: left,top;
+  transition: background .25s;
+}
+#cur-ring.big {
+  width: 56px; height: 56px;
+  background: rgba(184,149,58,.07);
+  border-color: var(--gold);
+}
+#cur-ring.light { border-color: rgba(255,255,255,.45); }
+#cur-dot.light  { background: rgba(255,255,255,.8); }
+
+/* ══════════════════════════════════════════════════════════
+   SCROLL PROGRESS
+══════════════════════════════════════════════════════════ */
+#prog {
+  position: fixed; top: 0; left: 0; height: 2px; width: 0%;
+  background: linear-gradient(to right, var(--gold), var(--gold-shine));
+  z-index: 9000; transition: width .06s linear;
+}
+
+/* ══════════════════════════════════════════════════════════
+   GRAIN
+══════════════════════════════════════════════════════════ */
+#grain {
+  position: fixed; inset: 0; pointer-events: none;
+  z-index: 9997; opacity: .028;
+  animation: grainShift .5s steps(1) infinite;
+}
+@keyframes grainShift {
+  0%  { transform: translate(0,0); }
+  25% { transform: translate(-1%,2%); }
+  50% { transform: translate(2%,-1%); }
+  75% { transform: translate(-2%,1%); }
+}
+
+/* ══════════════════════════════════════════════════════════
+   SIDE NAVIGATION
+══════════════════════════════════════════════════════════ */
+.side-nav {
+  position: fixed; right: 2.5rem; top: 50%; transform: translateY(-50%);
+  display: flex; flex-direction: column; align-items: flex-end; gap: 1.8rem;
+  z-index: 150;
+}
+.side-item {
+  display: flex; align-items: center; gap: 1rem;
+  cursor: none; background: none; border: none; outline: none; padding: 0;
+  transition: opacity .3s;
+}
+.side-label {
+  font-family: 'DM Sans', sans-serif;
+  font-size: .55rem; letter-spacing: .2em; text-transform: uppercase;
+  color: var(--stone-lt); opacity: 0; white-space: nowrap;
+  transform: translateX(6px);
+  transition: opacity .3s ease, transform .3s ease, color .3s ease;
+}
+.side-mark {
+  width: 20px; height: 1px;
+  background: rgba(160,148,128,.35);
+  transition: width .4s cubic-bezier(.16,1,.3,1), background .3s;
+  flex-shrink: 0;
+}
+.side-item:hover .side-label { opacity: 1; transform: translateX(0); color: var(--gold); }
+.side-item:hover .side-mark  { width: 28px; background: rgba(184,149,58,.65); }
+.side-item.active .side-label { opacity: 1; transform: translateX(0); color: var(--gold); }
+.side-item.active .side-mark  { width: 36px; background: var(--gold); }
+
+@media (max-width: 1100px) { .side-nav { display: none; } }
+
+/* ══════════════════════════════════════════════════════════
+   NAVIGATION
+══════════════════════════════════════════════════════════ */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 2rem 5rem;
+  background: transparent;
+  border-bottom: 1px solid transparent;
+  transition: padding .4s ease, background .4s ease, border-color .4s ease, box-shadow .4s ease;
+}
+nav::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+  background: linear-gradient(180deg, rgba(0,0,0,.32) 0%, transparent 100%);
+  pointer-events: none; z-index: -1;
+  opacity: 1; transition: opacity .4s ease;
+}
+nav.scrolled::before { opacity: 0; }
+nav.scrolled {
+  padding: 1rem 5rem;
+  background: rgba(255,255,255,.96);
+  backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+  border-bottom-color: var(--border);
+  box-shadow: 0 2px 40px rgba(0,0,0,.06);
+}
+
+.nav-logo {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.45rem; font-weight: 600; letter-spacing: .12em;
+  color: var(--white); text-decoration: none;
+  transition: color .4s ease;
+}
+.nav-logo span { color: var(--gold-line); font-weight: 300; margin-left: .15em; transition: color .4s ease; }
+
+nav.scrolled .nav-logo { color: var(--ink); }
+nav.scrolled .nav-logo span { color: var(--gold); }
+
+.nav-links { display: flex; gap: 2.5rem; list-style: none; align-items: center; }
+.nav-links a {
+  font-size: .72rem; font-weight: 400; letter-spacing: .2em;
+  text-transform: uppercase; color: rgba(255,255,255,.85);
+  text-decoration: none; transition: color .3s ease; position: relative;
+}
+.nav-links a::after {
+  content: ''; position: absolute; bottom: -3px; left: 0; right: 0;
+  height: 1px; background: var(--gold-line);
+  transform: scaleX(0); transform-origin: right;
+  transition: transform .3s ease, background .3s ease;
+}
+.nav-links a:hover { color: var(--white); }
+.nav-links a:hover::after,
+.nav-links a.active::after { transform: scaleX(1); transform-origin: left; }
+.nav-links a.active { color: var(--white); }
+
+nav.scrolled .nav-links a { color: var(--stone); }
+nav.scrolled .nav-links a::after { background: var(--gold); }
+nav.scrolled .nav-links a:hover,
+nav.scrolled .nav-links a.active { color: var(--gold); }
+
+.nav-cta {
+  font-size: .7rem; font-weight: 500; letter-spacing: .16em;
+  text-transform: uppercase; color: var(--ink) !important;
+  background: var(--gold-line); padding: .72rem 1.7rem;
+  text-decoration: none;
+  transition: background .3s, box-shadow .3s, transform .2s;
+}
+nav.scrolled .nav-cta { background: var(--gold); color: var(--white) !important; }
+.nav-cta::after { display: none !important; }
+.nav-cta:hover {
+  background: var(--gold-light) !important;
+  box-shadow: 0 6px 24px rgba(184,149,58,.4);
+  transform: translateY(-1px);
+  color: var(--ink) !important;
+}
+
+/* ══════════════════════════════════════════════════════════
+   REVEAL SYSTEM
+══════════════════════════════════════════════════════════ */
+.reveal {
+  opacity: 0; transform: translateY(34px);
+  transition: opacity .9s cubic-bezier(.16,1,.3,1), transform .9s cubic-bezier(.16,1,.3,1);
+}
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+.reveal-x {
+  opacity: 0; transform: translateX(-36px);
+  transition: opacity .95s cubic-bezier(.16,1,.3,1), transform .95s cubic-bezier(.16,1,.3,1);
+}
+.reveal-x.visible { opacity: 1; transform: translateX(0); }
+
+.d1 { transition-delay: .08s; } .d2 { transition-delay: .18s; }
+.d3 { transition-delay: .28s; } .d4 { transition-delay: .38s; }
+.d5 { transition-delay: .48s; } .d6 { transition-delay: .58s; }
+
+/* ══════════════════════════════════════════════════════════
+   HERO
+══════════════════════════════════════════════════════════ */
+.hero {
+  min-height: 100vh;
+  display: grid; grid-template-columns: 1fr 1fr;
+  align-items: center;
+  padding: 7rem 5rem 5rem;
+  position: relative; background: var(--ink); overflow: hidden;
+}
+
+#hero-canvas {
+  position: absolute; inset: 0; pointer-events: none; z-index: 0;
+}
+
+.hero-bg-rect {
+  position: absolute; top: -5%; right: 0; width: 48%; height: 110%;
+  background: linear-gradient(160deg, var(--gold-pale) 0%, #E8D9BB 100%);
+  clip-path: polygon(7% 0, 100% 0, 100% 100%, 0 100%);
+  z-index: 0; transition: transform .15s linear;
+}
+
+.hero-ornament-wrap {
+  position: absolute; right: 4.2rem; bottom: 4.2rem;
+  z-index: 1; pointer-events: none;
+  transition: transform .15s linear;
+}
+.hero-ornament {
+  width: 110px; height: 110px;
+  border: 1px solid rgba(184,149,58,.2);
+  animation: rotateSlow 55s linear infinite;
+}
+.hero-ornament::before {
+  content: ''; position: absolute; inset: 18px;
+  border: 1px solid rgba(184,149,58,.12);
+  transform: rotate(45deg);
+}
+.hero-ornament::after {
+  content: ''; position: absolute; inset: 36px;
+  border: 1px solid rgba(184,149,58,.08);
+}
+
+/* Vertical edge text */
+.hero-vert {
+  position: absolute; left: 1.6rem; top: 50%;
+  writing-mode: vertical-rl; text-orientation: mixed;
+  transform: translateY(-50%) rotate(180deg);
+  font-size: .56rem; letter-spacing: .42em; text-transform: uppercase;
+  color: rgba(255,255,255,.16); z-index: 2; user-select: none;
+  font-family: 'DM Sans', sans-serif;
+}
+
+.hero-left { position: relative; z-index: 1; padding-right: 5rem; }
+
+.hero-eyebrow {
+  display: inline-flex; align-items: center; gap: .8rem;
+  font-size: .66rem; font-weight: 500; letter-spacing: .35em;
+  text-transform: uppercase; color: var(--gold-line);
+  margin-bottom: 2.2rem;
+  opacity: 0; animation: fadeUp .8s ease forwards 1.4s;
+}
+.hero-eyebrow::before {
+  content: ''; height: 1px; background: var(--gold-line);
+  width: 0; animation: lineGrow .6s ease forwards 1.6s;
+}
+
+/* Line-by-line title reveal */
+.hero h1 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(3.2rem, 5.2vw, 5.6rem);
+  font-weight: 400; line-height: 1.04;
+  color: var(--white); margin-bottom: 2rem;
+}
+.ln  { display: block; overflow: hidden; padding-bottom: .04em; }
+.ln-i {
+  display: block; transform: translateY(108%);
+  animation: lineUp 1.05s cubic-bezier(.16,1,.3,1) forwards;
+}
+.ln:nth-child(1) .ln-i { animation-delay: .55s; }
+.ln:nth-child(2) .ln-i { animation-delay: .75s; }
+.ln:nth-child(3) .ln-i { animation-delay: .95s; }
+
+.hero h1 em {
+  font-style: italic;
+  background: linear-gradient(90deg, var(--gold) 0%, var(--gold-shine) 45%, var(--gold) 90%);
+  background-size: 200% auto;
+  -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shimmer 4.5s linear infinite 1.6s;
+}
+
+.hero-sub {
+  font-size: 1rem; color: rgba(255,255,255,.52); line-height: 1.95;
+  max-width: 430px; margin-bottom: 3rem;
+  opacity: 0; animation: fadeUp .9s ease forwards 1.4s;
+}
+
+.hero-actions {
+  display: flex; gap: 1.1rem; align-items: center; flex-wrap: wrap;
+  opacity: 0; animation: fadeUp .9s ease forwards 1.6s;
+}
+
+/* Hero scroll indicator */
+.hero-scroll {
+  position: absolute; bottom: 2.5rem; left: 50%; transform: translateX(-50%);
+  display: flex; flex-direction: column; align-items: center; gap: .6rem;
+  opacity: 0; animation: fadeUp .8s ease forwards 2.2s;
+  z-index: 2; cursor: pointer;
+}
+.hero-scroll span {
+  font-size: .58rem; letter-spacing: .35em; text-transform: uppercase;
+  color: rgba(255,255,255,.28);
+}
+.hero-scroll-line {
+  width: 1px; height: 32px;
+  background: linear-gradient(to bottom, var(--gold), transparent);
+  animation: scrollPulse 1.8s ease infinite;
+}
+@keyframes scrollPulse {
+  0%,100% { opacity: .4; transform: scaleY(1); }
+  50%      { opacity: 1; transform: scaleY(1.15); }
+}
+
+/* ── BUTTONS ─────────────────────────────────────────────── */
+.btn-gold {
+  display: inline-block; padding: 1rem 2.5rem;
+  background: var(--gold); color: var(--white);
+  font-family: 'DM Sans', sans-serif;
+  font-size: .72rem; font-weight: 500; letter-spacing: .2em;
+  text-transform: uppercase; text-decoration: none;
+  border: none; cursor: none; position: relative; overflow: hidden;
+  transition: background .3s, box-shadow .3s;
+}
+.btn-gold::after {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(120deg, transparent 20%, rgba(255,255,255,.18) 50%, transparent 80%);
+  transform: translateX(-100%); transition: transform .55s ease;
+}
+.btn-gold:hover { background: var(--gold-light); box-shadow: 0 10px 36px rgba(184,149,58,.42); }
+.btn-gold:hover::after { transform: translateX(100%); }
+
+.btn-outline {
+  display: inline-block; padding: 1rem 2.5rem;
+  background: transparent; color: var(--stone);
+  font-family: 'DM Sans', sans-serif;
+  font-size: .72rem; font-weight: 400; letter-spacing: .2em;
+  text-transform: uppercase; text-decoration: none;
+  border: 1px solid var(--border-gold); cursor: none;
+  transition: border-color .3s, color .3s, background .3s;
+}
+.btn-outline:hover {
+  border-color: var(--gold); color: var(--gold);
+  background: rgba(184,149,58,.04);
+}
+
+/* btn-outline on dark hero background */
+.hero .btn-outline {
+  color: rgba(255,255,255,.58);
+  border-color: rgba(255,255,255,.2);
+}
+.hero .btn-outline:hover {
+  border-color: var(--gold-line);
+  color: var(--gold-line);
+  background: rgba(255,255,255,.04);
+}
+
+/* ── HERO RIGHT CARD ──────────────────────────────────────── */
+.hero-right {
+  position: relative; z-index: 1;
+  display: flex; justify-content: center; align-items: center; padding: 2rem;
+  opacity: 0; animation: slideRight 1.1s cubic-bezier(.16,1,.3,1) forwards 1.1s;
+}
+@keyframes slideRight {
+  from { opacity:0; transform:translateX(36px); }
+  to   { opacity:1; transform:translateX(0); }
+}
+
+.hero-card {
+  background: var(--white); border: 1px solid var(--border);
+  padding: 3.2rem 2.8rem; max-width: 390px; width: 100%;
+  box-shadow: 0 24px 70px rgba(184,149,58,.12), 0 4px 20px rgba(0,0,0,.05);
+  position: relative;
+  transition: transform .45s cubic-bezier(.16,1,.3,1), box-shadow .45s;
+}
+.hero-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 36px 90px rgba(184,149,58,.18), 0 8px 30px rgba(0,0,0,.07);
+}
+.hero-card::before {
+  content: ''; position: absolute; top: 0; left: 2.8rem; right: 2.8rem;
+  height: 2px;
+  background: linear-gradient(90deg, var(--gold), var(--gold-shine), var(--gold));
+  background-size: 200% auto; animation: shimmer 3.5s linear infinite;
+}
+
+.hero-card-quote {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.45rem; font-style: italic; font-weight: 300;
+  color: var(--ink2); line-height: 1.58; margin-bottom: 2.2rem;
+}
+.hero-card-quote::before {
+  content: '"'; font-size: 3.8rem; color: var(--gold-line);
+  line-height: .85; display: block; margin-bottom: 1rem;
+  font-style: normal; opacity: .6;
+}
+
+.hero-card-sig { display: flex; align-items: center; gap: 1rem; }
+.hero-card-avatar {
+  width: 50px; height: 50px; border-radius: 50%; flex-shrink: 0;
+  background: linear-gradient(135deg, var(--gold-pale), var(--gold-line));
+  border: 1px solid var(--border-gold);
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.1rem; font-weight: 600; color: var(--gold);
+}
+.hero-card-name { font-size: .88rem; font-weight: 500; color: var(--ink); margin-bottom: .1rem; }
+.hero-card-role { font-size: .68rem; letter-spacing: .1em; color: var(--stone-lt); }
+
+/* ══════════════════════════════════════════════════════════
+   MARQUEE
+══════════════════════════════════════════════════════════ */
+.marquee {
+  background: var(--ink2);
+  padding: 1.35rem 0;
+  overflow: hidden;
+  border-top: 1px solid rgba(255,255,255,.04);
+  border-bottom: 1px solid rgba(184,149,58,.08);
+  position: relative;
+}
+.marquee::before,
+.marquee::after {
+  content: ''; position: absolute; top: 0; bottom: 0; width: 80px;
+  z-index: 2; pointer-events: none;
+}
+.marquee::before {
+  left: 0;
+  background: linear-gradient(to right, var(--ink2), transparent);
+}
+.marquee::after {
+  right: 0;
+  background: linear-gradient(to left, var(--ink2), transparent);
+}
+
+.marquee-track {
+  display: flex; align-items: center;
+  width: max-content;
+  animation: scrollLeft 38s linear infinite;
+}
+.marquee-track:hover { animation-play-state: paused; }
+
+.marquee-item {
+  font-size: .64rem; font-weight: 400; letter-spacing: .32em;
+  text-transform: uppercase; color: rgba(255,255,255,.3);
+  white-space: nowrap; padding: 0 2.2rem;
+  transition: color .3s;
+}
+.marquee-track:hover .marquee-item { color: rgba(255,255,255,.45); }
+.marquee-sep {
+  color: var(--gold); font-size: .6rem; opacity: .5; flex-shrink: 0;
+}
+
+/* ══════════════════════════════════════════════════════════
+   STATS BAR
+══════════════════════════════════════════════════════════ */
+.stats-bar {
+  background: var(--ink); display: flex; justify-content: center; position: relative;
+}
+.stats-bar::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg, transparent 0%, var(--gold) 30%, var(--gold-shine) 50%, var(--gold) 70%, transparent 100%);
+  opacity: .4;
+}
+
+.stats-inner { display: flex; width: 100%; max-width: 1100px; }
+
+.stat {
+  flex: 1; padding: 3.2rem 2rem;
+  text-align: center; position: relative;
+  transition: background .3s;
+}
+.stat:hover { background: rgba(184,149,58,.05); }
+.stat:not(:last-child)::after {
+  content: ''; position: absolute; right: 0; top: 22%; bottom: 22%;
+  width: 1px; background: rgba(255,255,255,.07);
+}
+.stat-num {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 3.2rem; font-weight: 400;
+  color: var(--gold-line); line-height: 1; margin-bottom: .5rem;
+  transition: color .3s;
+}
+.stat:hover .stat-num { color: var(--gold-shine); }
+.stat-label {
+  font-size: .66rem; letter-spacing: .24em;
+  text-transform: uppercase; color: rgba(255,255,255,.35);
+}
+
+/* ══════════════════════════════════════════════════════════
+   SECTION COMMONS
+══════════════════════════════════════════════════════════ */
+.section { padding: 9rem 5rem; }
+.section-alt { background: var(--section-bg); }
+
+.eyebrow {
+  display: inline-flex; align-items: center; gap: .8rem;
+  font-size: .66rem; font-weight: 500; letter-spacing: .32em;
+  text-transform: uppercase; color: var(--gold); margin-bottom: 1.3rem;
+}
+.eyebrow::before {
+  content: ''; height: 1px; background: var(--gold);
+  width: 0; transition: width .7s ease .2s;
+}
+.eyebrow.visible::before { width: 28px; }
+
+.section-heading {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(2.3rem, 4vw, 3.4rem);
+  font-weight: 400; line-height: 1.1;
+  color: var(--ink); margin-bottom: 3.8rem; max-width: 620px;
+}
+.section-heading em {
+  font-style: italic;
+  background: linear-gradient(90deg, var(--gold) 0%, var(--gold-shine) 50%, var(--gold) 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shimmer 5s linear infinite;
+}
+
+/* ══════════════════════════════════════════════════════════
+   À PROPOS
+══════════════════════════════════════════════════════════ */
+.about-grid { display: grid; grid-template-columns: 1.1fr 1fr; gap: 8rem; align-items: center; }
+
+.about-text p { font-size: .97rem; color: var(--stone); line-height: 1.98; margin-bottom: 1.4rem; }
+.about-text p b { color: var(--ink); font-weight: 500; }
+
+.about-values { display: grid; grid-template-columns: 1fr 1fr; gap: .8rem; margin-top: 2.6rem; }
+
+.value-pill {
+  display: flex; align-items: center; gap: .7rem;
+  padding: .9rem 1.1rem;
+  background: var(--white); border: 1px solid var(--border);
+  font-size: .82rem; color: var(--ink2); font-weight: 400;
+  transition: border-color .3s, transform .3s, box-shadow .3s; cursor: default;
+}
+.value-pill:hover { border-color: var(--gold); transform: translateY(-2px); box-shadow: 0 4px 18px rgba(184,149,58,.1); }
+.value-pill::before {
+  content: ''; width: 6px; height: 6px; border-radius: 50%;
+  background: var(--gold); flex-shrink: 0; transition: transform .3s;
+}
+.value-pill:hover::before { transform: scale(1.5); }
+
+/* Experience bar */
+.exp-bar {
+  display: flex; align-items: center; gap: 1.2rem;
+  margin-top: 3rem; padding-top: 2.5rem;
+  border-top: 1px solid var(--border);
+}
+.exp-yr {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1rem; color: var(--stone-lt); letter-spacing: .04em; flex-shrink: 0;
+}
+.exp-track {
+  flex: 1; height: 1px; background: var(--border); position: relative; overflow: hidden;
+}
+.exp-fill {
+  position: absolute; left: 0; top: 0; bottom: 0;
+  background: linear-gradient(90deg, var(--gold), var(--gold-shine));
+  width: 0; transition: width 1.8s cubic-bezier(.16,1,.3,1);
+}
+.exp-track.visible .exp-fill { width: 100%; }
+.exp-label {
+  font-size: .62rem; letter-spacing: .2em; text-transform: uppercase;
+  color: var(--gold); flex-shrink: 0;
+}
+
+/* Portrait */
+.about-portrait {
+  background: linear-gradient(150deg, var(--gold-pale) 0%, #EDE3CC 100%);
+  border: 1px solid var(--border-gold); padding: 3.2rem 2.8rem; position: relative;
+  transition: transform .45s cubic-bezier(.16,1,.3,1), box-shadow .45s;
+}
+.about-portrait:hover { transform: translateY(-5px); box-shadow: 0 24px 64px rgba(184,149,58,.14); }
+.about-portrait::after {
+  content: ''; position: absolute; bottom: -14px; right: -14px;
+  width: 100%; height: 100%; border: 1px solid var(--border-gold); z-index: -1;
+  transition: bottom .45s, right .45s;
+}
+.about-portrait:hover::after { bottom: -20px; right: -20px; }
+
+.portrait-initial {
+  width: 74px; height: 74px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--gold), var(--gold-light));
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2rem; font-weight: 500; color: var(--white);
+  margin-bottom: 1.6rem; box-shadow: 0 10px 28px rgba(184,149,58,.32);
+}
+.portrait-name { font-family: 'Cormorant Garamond', serif; font-size: 2rem; font-weight: 500; color: var(--ink); margin-bottom: .25rem; }
+.portrait-title { font-size: .7rem; letter-spacing: .18em; text-transform: uppercase; color: var(--gold); margin-bottom: 1.6rem; }
+.portrait-bio { font-size: .9rem; color: var(--stone); line-height: 1.92; border-top: 1px solid var(--border-gold); padding-top: 1.6rem; }
+.portrait-tags { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: 1.6rem; }
+.ptag {
+  font-size: .63rem; letter-spacing: .15em; text-transform: uppercase;
+  color: var(--gold); border: 1px solid var(--border-gold);
+  padding: .32rem .85rem; background: var(--white);
+  transition: background .25s, color .25s;
+}
+.ptag:hover { background: var(--gold); color: var(--white); }
+
+/* ══════════════════════════════════════════════════════════
+   PHILOSOPHIE (dark break section)
+══════════════════════════════════════════════════════════ */
+.philosophie {
+  background: var(--ink); padding: 10rem 5rem;
+  text-align: center; position: relative; overflow: hidden;
+}
+.philosophie::before {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(ellipse at 50% 50%, rgba(184,149,58,.07) 0%, transparent 68%);
+  pointer-events: none;
+}
+.philo-decor {
+  display: flex; align-items: center; justify-content: center;
+  gap: 1.5rem; margin-bottom: 3.5rem;
+}
+.philo-line { width: 60px; height: 1px; background: rgba(184,149,58,.3); }
+.philo-diamond { width: 6px; height: 6px; background: var(--gold); transform: rotate(45deg); opacity: .6; }
+
+.philo-quote {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(2rem, 3.8vw, 3.4rem);
+  font-weight: 300; font-style: italic;
+  color: rgba(255,255,255,.82); line-height: 1.42;
+  max-width: 900px; margin: 0 auto 3.5rem;
+}
+.philo-quote em {
+  font-style: italic;
+  background: linear-gradient(90deg, var(--gold-light) 0%, var(--gold-shine) 50%, var(--gold-light) 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shimmer 4s linear infinite;
+}
+
+.philo-vert { width: 1px; height: 44px; background: rgba(184,149,58,.3); margin: 0 auto 1.6rem; }
+.philo-sig {
+  font-size: .68rem; letter-spacing: .3em; text-transform: uppercase;
+  color: rgba(255,255,255,.28);
+}
+
+/* ══════════════════════════════════════════════════════════
+   SERVICES
+══════════════════════════════════════════════════════════ */
+.services-grid { display: grid; grid-template-columns: repeat(3,1fr); border: 1px solid var(--border); }
+
+.service-card {
+  padding: 3.2rem 2.6rem;
+  border-right: 1px solid var(--border); border-bottom: 1px solid var(--border);
+  background: var(--white);
+  transition: background .35s;
+  position: relative; overflow: hidden; cursor: default;
+  transform-style: preserve-3d;
+}
+.service-card:nth-child(3n) { border-right: none; }
+.service-card:nth-last-child(-n+3) { border-bottom: none; }
+
+.service-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, var(--gold), var(--gold-shine), var(--gold));
+  background-size: 200% auto;
+  transform: scaleX(0); transform-origin: left;
+  transition: transform .55s cubic-bezier(.16,1,.3,1);
+}
+.service-card::after {
+  content: attr(data-num); position: absolute; right: 1.2rem; bottom: .5rem;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 5.8rem; font-weight: 300; color: var(--border);
+  line-height: 1; pointer-events: none;
+  transition: color .35s, transform .4s ease;
+}
+
+.service-card:hover { background: var(--cream); }
+.service-card:hover::before { transform: scaleX(1); }
+.service-card:hover::after { color: rgba(184,149,58,.1); transform: scale(1.06); }
+
+.service-num {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1rem; font-weight: 400; color: var(--gold);
+  margin-bottom: 1.5rem; letter-spacing: .1em;
+}
+.service-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.5rem; font-weight: 500; color: var(--ink);
+  margin-bottom: 1rem; line-height: 1.22;
+}
+.service-desc { font-size: .87rem; color: var(--stone); line-height: 1.88; }
+
+/* ══════════════════════════════════════════════════════════
+   TÉMOIGNAGES
+══════════════════════════════════════════════════════════ */
+.testi-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 2rem; }
+
+.testi-card {
+  background: var(--white); border: 1px solid var(--border);
+  padding: 3rem 2.6rem; position: relative;
+  transition: transform .38s ease, box-shadow .38s ease;
+}
+.testi-card::before {
+  content: ''; position: absolute; top: 0; left: 2.6rem; right: 2.6rem;
+  height: 1px; background: var(--border-gold);
+  transition: background .3s;
+}
+.testi-card:hover { transform: translateY(-5px); box-shadow: 0 22px 55px rgba(184,149,58,.1); }
+.testi-card:hover::before { background: var(--gold); }
+
+.testi-open {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 4rem; color: var(--gold); line-height: .85;
+  margin-bottom: 1.3rem; opacity: .38; font-style: normal;
+}
+.testi-text {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.18rem; font-style: italic; font-weight: 300;
+  color: var(--ink2); line-height: 1.7; margin-bottom: 2.2rem;
+}
+.testi-sep { width: 28px; height: 1px; background: var(--border-gold); margin-bottom: 1.2rem; }
+.testi-name { font-size: .88rem; font-weight: 500; color: var(--ink); }
+.testi-role { font-size: .68rem; letter-spacing: .1em; text-transform: uppercase; color: var(--stone-lt); margin-top: .25rem; }
+
+/* ══════════════════════════════════════════════════════════
+   CONTACT
+══════════════════════════════════════════════════════════ */
+.contact-grid { display: grid; grid-template-columns: 1fr 1.35fr; gap: 7rem; align-items: start; }
+.contact-info-block { padding-top: .5rem; }
+.contact-intro { font-size: .97rem; color: var(--stone); line-height: 1.98; margin-bottom: 3rem; max-width: 360px; }
+.contact-item { margin-bottom: 2.2rem; }
+.contact-label { font-size: .62rem; letter-spacing: .26em; text-transform: uppercase; color: var(--gold); margin-bottom: .35rem; font-weight: 500; }
+.contact-value { font-size: .93rem; color: var(--ink); font-weight: 400; }
+
+.contact-form {
+  background: var(--white); border: 1px solid var(--border);
+  padding: 3.8rem; position: relative;
+  box-shadow: 0 24px 70px rgba(0,0,0,.05);
+}
+.contact-form::before {
+  content: ''; position: absolute; top: 0; left: 3.8rem; right: 3.8rem; height: 2px;
+  background: linear-gradient(90deg, var(--gold), var(--gold-shine), var(--gold));
+  background-size: 200% auto; animation: shimmer 4.5s linear infinite;
+}
+.contact-form h3 { font-family: 'Cormorant Garamond', serif; font-size: 1.9rem; font-weight: 400; color: var(--ink); margin-bottom: 2.4rem; }
+
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; }
+.form-group { display: flex; flex-direction: column; gap: .45rem; margin-bottom: 1.3rem; }
+.form-group label { font-size: .64rem; font-weight: 500; letter-spacing: .22em; text-transform: uppercase; color: var(--stone); }
+.form-group input,
+.form-group textarea,
+.form-group select {
+  background: var(--cream); border: 1px solid var(--border);
+  color: var(--ink); font-family: 'DM Sans', sans-serif;
+  font-size: .93rem; font-weight: 300; padding: .92rem 1.15rem; outline: none;
+  transition: border-color .3s, background .3s, box-shadow .3s;
+  resize: none; appearance: none; -webkit-appearance: none;
+}
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+  border-color: var(--gold); background: var(--white);
+  box-shadow: 0 0 0 3px rgba(184,149,58,.08);
+}
+.form-group textarea { min-height: 135px; }
+.form-notice { font-size: .72rem; color: var(--stone-lt); margin-bottom: 1.6rem; line-height: 1.65; }
+.form-success {
+  display: none;
+  background: rgba(184,149,58,.07); border: 1px solid var(--border-gold);
+  padding: 1.1rem 1.3rem; margin-top: 1.2rem;
+  font-size: .88rem; color: var(--gold);
+}
+
+/* ══════════════════════════════════════════════════════════
+   FOOTER
+══════════════════════════════════════════════════════════ */
+footer { background: var(--ink); position: relative; }
+footer::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg, transparent 0%, var(--gold) 25%, var(--gold-shine) 50%, var(--gold) 75%, transparent 100%);
+  opacity: .3;
+}
+
+.footer-top {
+  display: flex; justify-content: space-between; align-items: flex-start;
+  padding: 4rem 5rem 2.5rem;
+  border-bottom: 1px solid rgba(255,255,255,.05);
+  flex-wrap: wrap; gap: 3rem;
+}
+.footer-logo { font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; font-weight: 500; color: rgba(255,255,255,.85); letter-spacing: .13em; margin-bottom: .4rem; }
+.footer-logo span { color: var(--gold-line); font-weight: 300; }
+.footer-tagline { font-size: .62rem; letter-spacing: .22em; text-transform: uppercase; color: rgba(255,255,255,.25); }
+
+.footer-cols { display: flex; gap: 5rem; }
+.footer-col-title { font-size: .62rem; letter-spacing: .25em; text-transform: uppercase; color: rgba(255,255,255,.25); margin-bottom: 1.2rem; }
+.footer-col-links { list-style: none; display: flex; flex-direction: column; gap: .7rem; }
+.footer-col-links a { font-size: .78rem; color: rgba(255,255,255,.4); text-decoration: none; transition: color .25s; }
+.footer-col-links a:hover { color: var(--gold-line); }
+.footer-col-text { font-size: .78rem; color: rgba(255,255,255,.38); line-height: 1.7; }
+
+.footer-bottom {
+  padding: 1.8rem 5rem; display: flex; justify-content: space-between;
+  align-items: center; flex-wrap: wrap; gap: 1rem;
+}
+.footer-copy { font-size: .68rem; letter-spacing: .08em; color: rgba(255,255,255,.2); }
+.footer-legal { font-size: .68rem; letter-spacing: .06em; color: rgba(255,255,255,.16); }
+
+/* ══════════════════════════════════════════════════════════
+   UTILITIES
+══════════════════════════════════════════════════════════ */
+::selection { background: rgba(184,149,58,.2); color: var(--ink); }
+
+/* ══════════════════════════════════════════════════════════
+   HAMBURGER + MOBILE OVERLAY
+══════════════════════════════════════════════════════════ */
+.nav-hamburger {
+  display: none; flex-direction: column; justify-content: center;
+  gap: 5px; background: none; border: none; cursor: pointer;
+  padding: .4rem; z-index: 201;
+}
+.nav-hamburger span {
+  display: block; width: 22px; height: 1.5px;
+  background: var(--white);
+  transition: background .4s ease, transform .3s ease, opacity .3s ease;
+}
+nav.scrolled .nav-hamburger span { background: var(--ink); }
+
+.nav-hamburger.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+.nav-hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+.nav-hamburger.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+
+.mob-overlay {
+  position: fixed; inset: 0; z-index: 9000;
+  background: var(--ink);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 2.8rem;
+  opacity: 0; visibility: hidden;
+  transition: opacity .45s cubic-bezier(.16,1,.3,1), visibility .45s;
+}
+.mob-overlay.open { opacity: 1; visibility: visible; }
+
+.mob-overlay-logo {
+  position: absolute; top: 1.4rem; left: 1.5rem;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.35rem; font-weight: 600; letter-spacing: .12em;
+  color: rgba(255,255,255,.8); text-decoration: none;
+}
+.mob-overlay-logo span { color: var(--gold-line); font-weight: 300; }
+
+.mob-overlay-close {
+  position: absolute; top: 1.4rem; right: 1.5rem;
+  background: none; border: none; cursor: pointer;
+  font-size: 1.4rem; color: rgba(255,255,255,.4);
+  transition: color .25s; padding: .4rem;
+}
+.mob-overlay-close:hover { color: var(--white); }
+
+.mob-nav { list-style: none; text-align: center; display: flex; flex-direction: column; gap: 0; }
+.mob-nav li { overflow: hidden; }
+.mob-nav a {
+  display: block; padding: .8rem 2rem;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2.8rem; font-weight: 300; line-height: 1.1;
+  color: rgba(255,255,255,.7); text-decoration: none; letter-spacing: .03em;
+  transition: color .25s;
+}
+.mob-nav a:hover { color: var(--gold-line); }
+
+.mob-overlay-line { width: 1px; height: 36px; background: rgba(184,149,58,.25); }
+
+.mob-overlay-cta {
+  font-size: .7rem; font-weight: 500; letter-spacing: .2em;
+  text-transform: uppercase; color: var(--ink) !important;
+  background: var(--gold-line); padding: .9rem 2.2rem;
+  text-decoration: none; transition: background .3s;
+}
+.mob-overlay-cta:hover { background: var(--gold-light); }
+
+/* ══════════════════════════════════════════════════════════
+   RESPONSIVE
+══════════════════════════════════════════════════════════ */
+
+/* ── Wide screens ──────────────────────────────────────── */
+@media (max-width: 1280px) {
+  nav { padding: 1.6rem 3.5rem; }
+  nav.scrolled { padding: .9rem 3.5rem; }
+  .hero { padding: 7rem 3.5rem 5rem; }
+  .section { padding: 7.5rem 3.5rem; }
+  .philosophie { padding: 8rem 3.5rem; }
+  .footer-top { padding: 3.5rem 3.5rem 2rem; }
+  .footer-bottom { padding: 1.8rem 3.5rem; }
+}
+
+/* ── Tablet landscape ──────────────────────────────────── */
+@media (max-width: 1100px) {
+  nav { padding: 1.3rem 2.5rem; }
+  nav.scrolled { padding: .9rem 2.5rem; }
+  .hero { grid-template-columns: 1fr; padding: 7rem 2.5rem 4rem; }
+  .hero-left { padding-right: 0; }
+  .hero-right { display: none; }
+  .hero-vert { display: none; }
+  .hero-bg-rect { width: 100%; height: 35%; top: auto; bottom: 0; clip-path: none; opacity: .25; }
+  .section { padding: 6rem 2.5rem; }
+  .philosophie { padding: 7rem 2.5rem; }
+  .about-grid { grid-template-columns: 1fr; gap: 3.5rem; }
+  .about-portrait::after { display: none; }
+  .services-grid { grid-template-columns: 1fr 1fr; }
+  .service-card:nth-child(3n) { border-right: 1px solid var(--border); }
+  .service-card:nth-child(2n) { border-right: none; }
+  .testi-grid { grid-template-columns: repeat(2,1fr); gap: 1.5rem; }
+  .contact-grid { grid-template-columns: 1fr; gap: 3.5rem; }
+  .contact-form { padding: 3rem 2.5rem; }
+  .contact-form::before { left: 2.5rem; right: 2.5rem; }
+  .footer-top { padding: 3rem 2.5rem 2rem; flex-wrap: wrap; }
+  .footer-bottom { padding: 1.5rem 2.5rem; }
+  .footer-cols { gap: 3rem; }
+}
+
+/* ── Tablet portrait ───────────────────────────────────── */
+@media (max-width: 768px) {
+  nav { padding: 1.1rem 2rem; }
+  nav.scrolled { padding: .8rem 2rem; }
+  .hero { padding: 6.5rem 2rem 4rem; }
+  .hero h1 { font-size: clamp(2.8rem, 8vw, 4rem); }
+  .hero-sub { font-size: .95rem; }
+  .section { padding: 5.5rem 2rem; }
+  .philosophie { padding: 6rem 2rem; }
+  .philo-quote { font-size: clamp(1.7rem, 4.5vw, 2.5rem); }
+  .section-heading { font-size: clamp(2rem, 5vw, 2.8rem); margin-bottom: 2.8rem; }
+  .testi-grid { grid-template-columns: 1fr; }
+  .about-values { grid-template-columns: 1fr 1fr; }
+  .stats-inner { display: grid; grid-template-columns: 1fr 1fr; }
+  .stat:not(:last-child)::after { display: none; }
+  .stat { padding: 2.5rem 1.5rem; }
+  .footer-top { padding: 2.5rem 2rem 2rem; }
+  .footer-bottom { padding: 1.3rem 2rem; }
+  .footer-cols { flex-direction: column; gap: 2rem; }
+}
+
+/* ── Mobile ────────────────────────────────────────────── */
+@media (max-width: 640px) {
+  nav { padding: .9rem 1.5rem; }
+  nav.scrolled { padding: .7rem 1.5rem; }
+  .nav-links { display: none; }
+  .nav-hamburger { display: flex; }
+
+  .hero { padding: 5.5rem 1.5rem 3.5rem; min-height: 100svh; }
+  .hero-scroll { display: none; }
+  .hero h1 { font-size: clamp(2.4rem, 10vw, 3.5rem); margin-bottom: 1.5rem; }
+  .hero-sub { font-size: .9rem; margin-bottom: 2rem; max-width: 100%; }
+  .hero-actions { flex-direction: column; align-items: stretch; gap: .8rem; }
+  .hero-actions .btn-gold,
+  .hero-actions .btn-outline { text-align: center; padding: 1rem 1.5rem; }
+  .hero-bg-rect { display: none; }
+
+  .marquee-item { font-size: .6rem; padding: 0 1.4rem; }
+
+  .stats-inner { display: grid; grid-template-columns: 1fr 1fr; }
+  .stat { padding: 2rem 1rem; }
+  .stat-num { font-size: 2.4rem; }
+  .stat::after { display: none; }
+
+  .section { padding: 4.5rem 1.5rem; }
+  .philosophie { padding: 5rem 1.5rem; }
+  .section-heading { font-size: clamp(1.9rem, 7vw, 2.4rem); margin-bottom: 2rem; }
+  .philo-quote { font-size: clamp(1.5rem, 6vw, 2rem); }
+  .about-values { grid-template-columns: 1fr; }
+  .exp-bar { flex-wrap: wrap; gap: .8rem; }
+  .exp-track { width: 100%; flex: none; }
+
+  .services-grid { grid-template-columns: 1fr; border: none; }
+  .service-card {
+    border: 1px solid var(--border) !important;
+    border-bottom: none !important;
+    margin-bottom: 0;
+  }
+  .service-card:last-child { border-bottom: 1px solid var(--border) !important; }
+
+  .testi-grid { grid-template-columns: 1fr; }
+  .testi-card { padding: 2.2rem 1.8rem; }
+
+  .contact-grid { gap: 2.5rem; }
+  .contact-form { padding: 2rem 1.5rem; }
+  .contact-form::before { left: 1.5rem; right: 1.5rem; }
+  .form-row { grid-template-columns: 1fr; }
+
+  .footer-top { padding: 2.5rem 1.5rem 2rem; flex-direction: column; gap: 1.5rem; }
+  .footer-bottom { padding: 1.3rem 1.5rem; flex-direction: column; text-align: center; gap: .6rem; }
+  .footer-cols { flex-direction: column; gap: 2rem; }
+
+  body { cursor: auto; }
+  #cur-ring, #cur-dot { display: none; }
+}
+
+/* ── Small mobile ──────────────────────────────────────── */
+@media (max-width: 390px) {
+  .hero h1 { font-size: clamp(2rem, 10vw, 2.8rem); }
+  .stat-num { font-size: 2rem; }
+  .mob-nav a { font-size: 2.2rem; }
+}
+
+/* ══════════════════════════════════════════════════════════
+   DERNIERS ARTICLES
+══════════════════════════════════════════════════════════ */
+#blog { border-top: 1px solid var(--border); }
+.latest-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 2rem; }
+.latest-card {
+  display: block; text-decoration: none; background: var(--white);
+  border: 1px solid var(--border); padding: 2.4rem 2.2rem; position: relative;
+  transition: transform .38s ease, box-shadow .38s ease, border-color .3s;
+}
+.latest-card:hover { transform: translateY(-5px); box-shadow: 0 22px 55px rgba(184,149,58,.1); border-color: var(--border-gold); }
+.latest-card-meta { font-size: .64rem; letter-spacing: .22em; text-transform: uppercase; color: var(--gold); margin-bottom: 1rem; }
+.latest-card-title { font-family: 'Cormorant Garamond', serif; font-size: 1.45rem; font-weight: 500; color: var(--ink); line-height: 1.25; margin-bottom: .9rem; }
+.latest-card-desc { font-size: .87rem; color: var(--stone); line-height: 1.8; }
+.latest-more { margin-top: 3rem; text-align: center; }
+@media (max-width: 1100px) { .latest-grid { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 768px)  { .latest-grid { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+
+<!-- LOADER -->
+<div id="loader">
+  <div>
+    <div class="loader-logo">ONAC <span>Conseil</span></div>
+    <div class="loader-sub">Expert-Comptable · Paris</div>
+    <div class="loader-line"></div>
+  </div>
+</div>
+
+<!-- CURSOR -->
+<div id="cur-ring"></div>
+<div id="cur-dot"></div>
+
+<!-- PROGRESS -->
+<div id="prog"></div>
+
+<!-- GRAIN -->
+<div id="grain"></div>
+
+<!-- SIDE NAV -->
+<aside class="side-nav" aria-hidden="true">
+  <button class="side-item active" data-section="accueil"><span class="side-label">Accueil</span><span class="side-mark"></span></button>
+  <button class="side-item" data-section="apropos"><span class="side-label">À propos</span><span class="side-mark"></span></button>
+  <button class="side-item" data-section="services"><span class="side-label">Services</span><span class="side-mark"></span></button>
+  <button class="side-item" data-section="contact"><span class="side-label">Contact</span><span class="side-mark"></span></button>
+</aside>
+
+<!-- ═══ NAVIGATION ═══════════════════════════════════════════ -->
+<nav id="nav">
+  <a href="#accueil" class="nav-logo">ONAC <span>Conseil</span></a>
+  <ul class="nav-links">
+    <li><a href="#apropos">À propos</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="/blog/">Blog</a></li>
+    <li><a href="#contact">Contact</a></li>
+    <li><a href="#contact" class="nav-cta">Prendre rendez-vous</a></li>
+  </ul>
+  <button class="nav-hamburger" id="navHamburger" aria-label="Ouvrir le menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- ═══ MOBILE OVERLAY ════════════════════════════════════ -->
+<div class="mob-overlay" id="mobOverlay">
+  <a href="#accueil" class="mob-overlay-logo">ONAC <span>Conseil</span></a>
+  <button class="mob-overlay-close" id="mobOverlayClose" aria-label="Fermer">✕</button>
+  <ul class="mob-nav">
+    <li><a href="#apropos">À propos</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#temoignages">Témoignages</a></li>
+    <li><a href="/blog/">Blog</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <div class="mob-overlay-line"></div>
+  <a href="#contact" class="mob-overlay-cta">Prendre rendez-vous</a>
+</div>
+
+<!-- ═══ HERO ══════════════════════════════════════════════════ -->
+<section class="hero" id="accueil">
+  <canvas id="hero-canvas"></canvas>
+  <div class="hero-bg-rect"></div>
+  <div class="hero-ornament-wrap"><div class="hero-ornament"></div></div>
+  <div class="hero-vert">Paris · France · Depuis 1999</div>
+
+  <div class="hero-left">
+    <div class="hero-eyebrow">Expert-Comptable — Paris 8e</div>
+    <h1>
+      <span class="ln"><span class="ln-i">L'expertise</span></span>
+      <span class="ln"><span class="ln-i">au service de votre</span></span>
+      <span class="ln"><span class="ln-i"><em>réussite</em></span></span>
+    </h1>
+    <p class="hero-sub">Un accompagnement sur-mesure pour les dirigeants et entrepreneurs qui veulent piloter leur activité avec clarté et sérénité.</p>
+    <div class="hero-actions">
+      <a href="#contact" class="btn-gold mag">Prendre rendez-vous</a>
+      <a href="#services" class="btn-outline mag">Découvrir nos services</a>
+    </div>
+  </div>
+
+  <div class="hero-right">
+    <div class="hero-card">
+      <div class="hero-card-quote">Chaque entreprise mérite un expert qui comprend ses enjeux, pas seulement ses chiffres.</div>
+      <div class="hero-card-sig">
+        <div class="hero-card-avatar">O</div>
+        <div>
+          <div class="hero-card-name">Olivier Nabet — Fondateur d'ONAC Conseil</div>
+          <div class="hero-card-role">Expert-Comptable & Commissaire aux Comptes</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-scroll" onclick="document.getElementById('stats').scrollIntoView({behavior:'smooth'})">
+    <div class="hero-scroll-line"></div>
+    <span>Défiler</span>
+  </div>
+</section>
+
+<!-- ═══ MARQUEE ═══════════════════════════════════════════════ -->
+<div class="marquee">
+  <div class="marquee-track">
+    <span class="marquee-item">Expertise Comptable</span><span class="marquee-sep">◆</span>
+    <span class="marquee-item">Fiscalité &amp; Optimisation</span><span class="marquee-sep">◆</span>
+    <span class="marquee-item">Commissariat aux Comptes</span><span class="marquee-sep">◆</span>
+    <span class="marquee-item">Gestion Sociale</span><span class="marquee-sep">◆</span>
+    <span class="marquee-item">Conseil Stratégique</span><span class="marquee-sep">◆</span>
+    <span class="marquee-item">Création d'Entreprise</span><span class="marquee-sep">◆</span>
+    <span class="marquee-item">Audit &amp; Certification</span><span class="marquee-sep">◆</span>
+    <span class="marquee-item">Rigueur · Excellence · Discrétion</span><span class="marquee-sep">◆</span>
+    <!-- duplicate for seamless loop -->
+    <span class="marquee-item">Expertise Comptable</span><span class="marquee-sep">◆</span>
+    <span class="marquee-item">Fiscalité &amp; Optimisation</span><span class="marquee-sep">◆</span>
+    <span class="marquee-item">Commissariat aux Comptes</span><span class="marquee-sep">◆</span>
+    <span class="marquee-item">Gestion Sociale</span><span class="marquee-sep">◆</span>
+    <span class="marquee-item">Conseil Stratégique</span><span class="marquee-sep">◆</span>
+    <span class="marquee-item">Création d'Entreprise</span><span class="marquee-sep">◆</span>
+    <span class="marquee-item">Audit &amp; Certification</span><span class="marquee-sep">◆</span>
+    <span class="marquee-item">Rigueur · Excellence · Discrétion</span><span class="marquee-sep">◆</span>
+  </div>
+</div>
+
+<!-- ═══ STATS ═════════════════════════════════════════════════ -->
+<div class="stats-bar" id="stats">
+  <div class="stats-inner">
+    <div class="stat">
+      <div class="stat-num" data-count="25" data-prefix="+" data-suffix="">+25</div>
+      <div class="stat-label">Années d'expérience</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num" data-count="500" data-prefix="" data-suffix="+">500+</div>
+      <div class="stat-label">Clients accompagnés</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">OEC</div>
+      <div class="stat-label">Inscrit à l'Ordre</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num" data-count="100" data-prefix="" data-suffix="%">100%</div>
+      <div class="stat-label">Indépendant &amp; certifié</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ À PROPOS ══════════════════════════════════════════════ -->
+<section class="section" id="apropos">
+  <div class="about-grid">
+    <div class="about-text">
+      <div class="eyebrow reveal">À propos</div>
+      <h2 class="section-heading reveal d1">Un cabinet construit sur la <em>confiance</em> et la compétence</h2>
+      <p class="reveal d2">ONAC Conseil est un cabinet d'expertise comptable indépendant, fondé avec la conviction que chaque client mérite un service personnalisé et une expertise technique sans compromis.</p>
+      <p class="reveal d3">Notre approche conjugue <b>rigueur et vision stratégique</b> pour vous offrir bien plus qu'un service comptable : un véritable partenariat dans le développement de votre activité.</p>
+      <p class="reveal d4">Nous accompagnons TPE, PME et entrepreneurs qui souhaitent se concentrer sur ce qui compte vraiment : le développement de leur business.</p>
+      <div class="about-values reveal d5">
+        <div class="value-pill">Rigueur</div>
+        <div class="value-pill">Confidentialité</div>
+        <div class="value-pill">Disponibilité</div>
+        <div class="value-pill">Excellence</div>
+      </div>
+      <div class="exp-bar reveal d6">
+        <span class="exp-yr">1999</span>
+        <div class="exp-track">
+          <div class="exp-fill"></div>
+        </div>
+        <span class="exp-yr">2026</span>
+        <span class="exp-label">25 ans d'excellence</span>
+      </div>
+    </div>
+    <div class="reveal-x d2">
+      <div class="about-portrait">
+        <div class="portrait-initial">ON</div>
+        <div class="portrait-name">Olivier Nabet</div>
+        <div class="portrait-title">Expert-Comptable &amp; Commissaire aux comptes</div>
+        <div class="portrait-bio">Expert-Comptable inscrit à l'Ordre des Experts-Comptables de Paris, Olivier Nabet accompagne depuis plus de 25 ans les dirigeants dans la gestion, l'optimisation et la croissance de leur entreprise. Son approche allie technicité juridique et fiscale à un conseil de proximité.</div>
+        <div class="portrait-tags">
+          <span class="ptag">DEC</span>
+          <span class="ptag">OEC</span>
+          <span class="ptag">Fiscalité</span>
+          <span class="ptag">Audit</span>
+          <span class="ptag">Patrimoine</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ PHILOSOPHIE ═══════════════════════════════════════════ -->
+<section class="philosophie" id="philosophie">
+  <div class="philo-decor">
+    <div class="philo-line"></div>
+    <div class="philo-diamond"></div>
+    <div class="philo-line"></div>
+  </div>
+  <blockquote class="philo-quote reveal">
+    La réussite de nos clients n'est pas seulement notre objectif —<br>
+    c'est notre <em>raison d'être</em>.
+  </blockquote>
+  <div class="philo-vert"></div>
+  <div class="philo-sig reveal d2">Olivier Nabet &nbsp;·&nbsp; Fondateur, ONAC Conseil</div>
+</section>
+
+<!-- ═══ SERVICES ══════════════════════════════════════════════ -->
+<section class="section section-alt" id="services">
+  <div class="eyebrow reveal">Nos services</div>
+  <h2 class="section-heading reveal d1">Des missions adaptées à chaque <em>situation</em></h2>
+  <div class="services-grid">
+    <div class="service-card reveal d1" data-num="01">
+      <div class="service-num">01</div>
+      <div class="service-title">Comptabilité &amp; Tenue de comptes</div>
+      <div class="service-desc">Tenue et révision comptable, établissement des comptes annuels. Rigueur et ponctualité garanties.</div>
+    </div>
+    <div class="service-card reveal d2" data-num="02">
+      <div class="service-num">02</div>
+      <div class="service-title">Fiscalité &amp; Optimisation</div>
+      <div class="service-desc">Déclarations IS, TVA, IR, optimisation de la charge fiscale, veille réglementaire et conseil en structuration juridique et fiscale.</div>
+    </div>
+    <div class="service-card reveal d3" data-num="03">
+      <div class="service-num">03</div>
+      <div class="service-title">Paie &amp; Gestion sociale</div>
+      <div class="service-desc">Fiches de paie, déclarations sociales, gestion des entrées/sorties de personnel et conseil en droit du travail.</div>
+    </div>
+    <div class="service-card reveal d4" data-num="04">
+      <div class="service-num">04</div>
+      <div class="service-title">Création &amp; Structuration</div>
+      <div class="service-desc">Accompagnement à la création, choix de la forme juridique, prévisionnel financier, business plan et levée de fonds.</div>
+    </div>
+    <div class="service-card reveal d5" data-num="05">
+      <div class="service-num">05</div>
+      <div class="service-title">Audit &amp; Commissariat</div>
+      <div class="service-desc">Mission légale de commissariat aux comptes, audit contractuel, certification des comptes et rapports spéciaux.</div>
+    </div>
+    <div class="service-card reveal d6" data-num="06">
+      <div class="service-num">06</div>
+      <div class="service-title">Conseil &amp; Stratégie financière</div>
+      <div class="service-desc">Tableaux de bord, analyse de performance, conseil en transmission et cession, accompagnement à chaque étape de votre croissance.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ TÉMOIGNAGES ═══════════════════════════════════════════ -->
+<section class="section" id="temoignages">
+  <div class="eyebrow reveal">Témoignages</div>
+  <h2 class="section-heading reveal d1">La confiance de nos <em>clients</em></h2>
+  <div class="testi-grid">
+    <div class="testi-card reveal d2">
+      <div class="testi-open">"</div>
+      <p class="testi-text">Un accompagnement d'une grande rigueur et d'une disponibilité remarquable. Olivier Nabet comprend nos enjeux bien au-delà des chiffres — c'est un vrai partenaire stratégique.</p>
+      <div class="testi-sep"></div>
+      <div class="testi-name">Pierre Durand</div>
+      <div class="testi-role">Directeur Général · Durand Industries SAS</div>
+    </div>
+    <div class="testi-card reveal d3">
+      <div class="testi-open">"</div>
+      <p class="testi-text">Depuis que nous travaillons avec ONAC Conseil, notre gestion fiscale est optimisée et notre visibilité financière transformée. Un cabinet à la hauteur des grands enjeux.</p>
+      <div class="testi-sep"></div>
+      <div class="testi-name">Sophie Marchand</div>
+      <div class="testi-role">Fondatrice · Marchand &amp; Associés</div>
+    </div>
+    <div class="testi-card reveal d4">
+      <div class="testi-open">"</div>
+      <p class="testi-text">Réactivité, expertise et confidentialité absolue. ONAC Conseil nous a accompagnés lors d'une opération de cession complexe avec un professionnalisme exemplaire.</p>
+      <div class="testi-sep"></div>
+      <div class="testi-name">Marc Lefebvre</div>
+      <div class="testi-role">PDG · Groupe Lefebvre Conseil</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ DERNIERS ARTICLES (généré par scripts/build.mjs) ═══ -->
+<!-- BLOG_LATEST -->
+
+<!-- ═══ CONTACT ═══════════════════════════════════════════════ -->
+<section class="section section-alt" id="contact">
+  <div class="contact-grid">
+    <div class="contact-info-block">
+      <div class="eyebrow reveal">Contact</div>
+      <h2 class="section-heading reveal d1">Parlons de votre <em>projet</em></h2>
+      <p class="contact-intro reveal d2">Chaque situation est unique. Contactez-nous pour un premier échange confidentiel et sans engagement afin d'évaluer ensemble comment ONAC Conseil peut vous accompagner.</p>
+      <div class="contact-item reveal d3"><div class="contact-label">Cabinet</div><div class="contact-value">ONAC Conseil</div></div>
+      <div class="contact-item reveal d4"><div class="contact-label">Téléphone</div><div class="contact-value">+33 6 13 41 70 32</div></div>
+      <div class="contact-item reveal d5"><div class="contact-label">Email</div><div class="contact-value">Olivier.nabet@onac-conseil.fr</div></div>
+      <div class="contact-item reveal d6"><div class="contact-label">Adresse</div><div class="contact-value">140 Boulevard Haussmann<br>75008 Paris, France</div></div>
+    </div>
+    <div class="reveal-x d2">
+      <div class="contact-form">
+        <h3>Envoyer un message</h3>
+        <form id="contactForm" action="https://formspree.io/f/mnjgbooy" method="POST">
+          <div class="form-row">
+            <div class="form-group"><label for="prenom">Prénom *</label><input type="text" id="prenom" name="prenom" required placeholder="Jean"></div>
+            <div class="form-group"><label for="nom">Nom *</label><input type="text" id="nom" name="nom" required placeholder="Dupont"></div>
+          </div>
+          <div class="form-group"><label for="email">Email *</label><input type="email" id="email" name="email" required placeholder="jean.dupont@email.com"></div>
+          <div class="form-group"><label for="telephone">Téléphone</label><input type="tel" id="telephone" name="telephone" placeholder="+33 6 00 00 00 00"></div>
+          <div class="form-group"><label for="societe">Société / Structure</label><input type="text" id="societe" name="societe" placeholder="Ma Société SAS"></div>
+          <div class="form-group">
+            <label for="objet">Objet de la demande *</label>
+            <select id="objet" name="objet" required>
+              <option value="" disabled selected>Sélectionner...</option>
+              <option>Comptabilité &amp; Bilan</option>
+              <option>Fiscalité &amp; Optimisation</option>
+              <option>Création d'entreprise</option>
+              <option>Paie &amp; Social</option>
+              <option>Audit &amp; Commissariat</option>
+              <option>Conseil stratégique</option>
+              <option>Autre</option>
+            </select>
+          </div>
+          <div class="form-group"><label for="message">Message *</label><textarea id="message" name="message" required placeholder="Décrivez brièvement votre situation ou votre besoin..."></textarea></div>
+          <p class="form-notice">* Champs obligatoires. Vos données sont traitées de manière confidentielle et ne sont jamais transmises à des tiers.</p>
+          <button type="submit" class="btn-gold mag" style="width:100%;cursor:none;">Envoyer le message</button>
+          <div class="form-success" id="formSuccess">✓ Votre message a bien été envoyé. Nous vous répondrons dans les meilleurs délais.</div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FOOTER ════════════════════════════════════════════════ -->
+<footer>
+  <div class="footer-top">
+    <div class="footer-brand">
+      <div class="footer-logo">ONAC <span>Conseil</span></div>
+      <div class="footer-tagline">Expert-Comptable · Paris 8e · Depuis 1999</div>
+    </div>
+    <div class="footer-cols">
+      <div>
+        <div class="footer-col-title">Navigation</div>
+        <ul class="footer-col-links">
+          <li><a href="#apropos">À propos</a></li>
+          <li><a href="#services">Services</a></li>
+          <li><a href="#temoignages">Témoignages</a></li>
+          <li><a href="/blog/">Blog</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-title">Coordonnées</div>
+        <div class="footer-col-text">
+          140 Boulevard Haussmann<br>
+          75008 Paris, France<br><br>
+          +33 6 13 41 70 32<br>
+          Olivier.nabet@onac-conseil.fr
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="footer-copy">© 2026 ONAC Conseil · Tous droits réservés</div>
+    <div class="footer-legal">Expert-Comptable inscrit à l'Ordre des Experts-Comptables · Mentions légales</div>
+  </div>
+</footer>
+
+<script>
+/* ────────────────────────────────────────────────────────────
+   LOADER
+──────────────────────────────────────────────────────────── */
+window.addEventListener('load', () =>
+  setTimeout(() => document.getElementById('loader').classList.add('out'), 950)
+);
+
+/* ────────────────────────────────────────────────────────────
+   GRAIN
+──────────────────────────────────────────────────────────── */
+(function () {
+  const c = document.createElement('canvas'); c.width = c.height = 200;
+  const x = c.getContext('2d'), d = x.createImageData(200, 200);
+  for (let i = 0; i < d.data.length; i += 4) {
+    const v = Math.random() * 255;
+    d.data[i] = d.data[i+1] = d.data[i+2] = v; d.data[i+3] = 18;
+  }
+  x.putImageData(d, 0, 0);
+  const g = document.getElementById('grain');
+  g.style.backgroundImage = 'url(' + c.toDataURL() + ')';
+  g.style.backgroundSize = '200px';
+})();
+
+/* ────────────────────────────────────────────────────────────
+   CUSTOM CURSOR
+──────────────────────────────────────────────────────────── */
+const ring = document.getElementById('cur-ring');
+const dot  = document.getElementById('cur-dot');
+let mx = 0, my = 0, rx = 0, ry = 0;
+
+document.addEventListener('mousemove', e => {
+  mx = e.clientX; my = e.clientY;
+  dot.style.left = mx + 'px'; dot.style.top = my + 'px';
+});
+
+(function animRing() {
+  rx += (mx - rx) * .11; ry += (my - ry) * .11;
+  ring.style.left = rx + 'px'; ring.style.top = ry + 'px';
+  requestAnimationFrame(animRing);
+})();
+
+// Enlarge on interactive
+document.querySelectorAll('a, button, .service-card, .value-pill, .ptag, .about-portrait, .testi-card').forEach(el => {
+  el.addEventListener('mouseenter', () => ring.classList.add('big'));
+  el.addEventListener('mouseleave', () => ring.classList.remove('big'));
+});
+
+// Light cursor on dark sections
+document.querySelectorAll('.hero, .stats-bar, .philosophie, footer, .marquee').forEach(sec => {
+  sec.addEventListener('mouseenter', () => { ring.classList.add('light'); dot.classList.add('light'); });
+  sec.addEventListener('mouseleave', () => { ring.classList.remove('light'); dot.classList.remove('light'); });
+});
+
+/* ────────────────────────────────────────────────────────────
+   SCROLL PROGRESS
+──────────────────────────────────────────────────────────── */
+const prog = document.getElementById('prog');
+const onScroll = () => {
+  const pct = window.scrollY / (document.documentElement.scrollHeight - window.innerHeight) * 100;
+  prog.style.width = pct + '%';
+};
+window.addEventListener('scroll', onScroll, { passive: true });
+
+/* ────────────────────────────────────────────────────────────
+   NAV
+──────────────────────────────────────────────────────────── */
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () =>
+  nav.classList.toggle('scrolled', window.scrollY > 80)
+, { passive: true });
+
+/* ────────────────────────────────────────────────────────────
+   HERO PARTICLES
+──────────────────────────────────────────────────────────── */
+(function () {
+  const canvas = document.getElementById('hero-canvas');
+  const ctx = canvas.getContext('2d');
+  let W, H, pts = [];
+
+  function resize() {
+    const hero = canvas.parentElement;
+    W = canvas.width  = hero.offsetWidth;
+    H = canvas.height = hero.offsetHeight;
+  }
+  resize();
+  new ResizeObserver(resize).observe(canvas.parentElement);
+
+  for (let i = 0; i < 30; i++) pts.push({
+    x: Math.random() * 1400, y: Math.random() * 900,
+    r: Math.random() * 1.3 + 0.25,
+    vx: (Math.random() - .5) * .22,
+    vy: -(Math.random() * .28 + .08),
+    a: Math.random() * .32 + .08
+  });
+
+  (function draw() {
+    ctx.clearRect(0, 0, W, H);
+    pts.forEach(p => {
+      ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(184,149,58,${p.a})`; ctx.fill();
+      p.x += p.vx; p.y += p.vy;
+      if (p.y < -8) { p.y = H + 8; p.x = Math.random() * W; }
+      if (p.x < -8) p.x = W + 8; if (p.x > W + 8) p.x = -8;
+    });
+    requestAnimationFrame(draw);
+  })();
+})();
+
+/* ────────────────────────────────────────────────────────────
+   HERO MOUSE PARALLAX
+──────────────────────────────────────────────────────────── */
+const heroBg   = document.querySelector('.hero-bg-rect');
+const heroWrap = document.querySelector('.hero-ornament-wrap');
+const heroEl   = document.querySelector('.hero');
+
+heroEl.addEventListener('mousemove', e => {
+  if (window.innerWidth <= 1100) return;
+  const cx = (e.clientX / window.innerWidth  - .5) * 14;
+  const cy = (e.clientY / window.innerHeight - .5) * 10;
+  heroBg.style.transform   = `translate(${cx}px, ${cy}px)`;
+  heroWrap.style.transform = `translate(${-cx * .55}px, ${-cy * .55}px)`;
+});
+heroEl.addEventListener('mouseleave', () => {
+  heroBg.style.transform = heroWrap.style.transform = '';
+});
+
+/* ────────────────────────────────────────────────────────────
+   SCROLL PARALLAX (hero elements on scroll)
+──────────────────────────────────────────────────────────── */
+window.addEventListener('scroll', () => {
+  const y = window.scrollY;
+  if (y < window.innerHeight) {
+    document.getElementById('hero-canvas').style.transform = `translateY(${y * .22}px)`;
+  }
+}, { passive: true });
+
+/* ────────────────────────────────────────────────────────────
+   SCROLL REVEAL
+──────────────────────────────────────────────────────────── */
+const io = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); }
+  });
+}, { threshold: 0.12 });
+
+document.querySelectorAll('.reveal, .reveal-x, .eyebrow').forEach(el => io.observe(el));
+
+/* ────────────────────────────────────────────────────────────
+   COUNTER ANIMATION
+──────────────────────────────────────────────────────────── */
+const cio = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (!e.isIntersecting) return;
+    const el = e.target;
+    const target = +el.dataset.count;
+    const pre = el.dataset.prefix || '', suf = el.dataset.suffix || '';
+    let t0 = null;
+    (function tick(ts) {
+      if (!t0) t0 = ts;
+      const p = Math.min((ts - t0) / 2200, 1);
+      el.textContent = pre + Math.floor((1 - Math.pow(1 - p, 3)) * target) + suf;
+      if (p < 1) requestAnimationFrame(tick);
+    })(0);
+    cio.unobserve(el);
+  });
+}, { threshold: 0.5 });
+document.querySelectorAll('.stat-num[data-count]').forEach(el => cio.observe(el));
+
+/* ────────────────────────────────────────────────────────────
+   EXPERIENCE BAR
+──────────────────────────────────────────────────────────── */
+const expIO = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) { e.target.classList.add('visible'); expIO.unobserve(e.target); }
+  });
+}, { threshold: 0.5 });
+const expTrack = document.querySelector('.exp-track');
+if (expTrack) expIO.observe(expTrack);
+
+/* ────────────────────────────────────────────────────────────
+   SERVICE CARD 3D TILT
+──────────────────────────────────────────────────────────── */
+document.querySelectorAll('.service-card').forEach(card => {
+  card.addEventListener('mousemove', e => {
+    const r = card.getBoundingClientRect();
+    const x = ((e.clientX - r.left) / r.width  - .5) * 9;
+    const y = ((e.clientY - r.top)  / r.height - .5) * 9;
+    card.style.transition = 'background .35s';
+    card.style.transform  = `perspective(800px) rotateY(${x}deg) rotateX(${-y}deg)`;
+  });
+  card.addEventListener('mouseleave', () => {
+    card.style.transition = 'background .35s, transform .55s cubic-bezier(.16,1,.3,1)';
+    card.style.transform  = '';
+  });
+});
+
+/* ────────────────────────────────────────────────────────────
+   MAGNETIC BUTTONS
+──────────────────────────────────────────────────────────── */
+document.querySelectorAll('.mag').forEach(btn => {
+  btn.addEventListener('mousemove', e => {
+    const r = btn.getBoundingClientRect();
+    const x = (e.clientX - r.left - r.width  / 2) * .2;
+    const y = (e.clientY - r.top  - r.height / 2) * .2;
+    btn.style.transition = 'background .3s, box-shadow .3s, border-color .3s, color .3s';
+    btn.style.transform  = `translate(${x}px,${y}px)`;
+  });
+  btn.addEventListener('mouseleave', () => {
+    btn.style.transition = 'transform .55s cubic-bezier(.16,1,.3,1), background .3s, box-shadow .3s, border-color .3s, color .3s';
+    btn.style.transform  = '';
+  });
+});
+
+/* ────────────────────────────────────────────────────────────
+   SIDE NAV
+──────────────────────────────────────────────────────────── */
+const sideItems = document.querySelectorAll('.side-item');
+const mainSections = ['accueil', 'apropos', 'services', 'contact'];
+
+sideItems.forEach(item => {
+  item.addEventListener('click', () => {
+    const target = document.getElementById(item.dataset.section);
+    if (target) target.scrollIntoView({ behavior: 'smooth' });
+  });
+});
+
+window.addEventListener('scroll', () => {
+  let cur = mainSections[0];
+  mainSections.forEach(id => {
+    const el = document.getElementById(id);
+    if (el && window.scrollY >= el.offsetTop - window.innerHeight / 2) cur = id;
+  });
+  sideItems.forEach(item => item.classList.toggle('active', item.dataset.section === cur));
+}, { passive: true });
+
+/* ────────────────────────────────────────────────────────────
+   NAV ACTIVE HIGHLIGHT
+──────────────────────────────────────────────────────────── */
+const allSections = document.querySelectorAll('section[id], div[id]');
+const navAs       = document.querySelectorAll('.nav-links a:not(.nav-cta)');
+
+window.addEventListener('scroll', () => {
+  let cur = '';
+  allSections.forEach(s => { if (window.scrollY >= s.offsetTop - 150) cur = s.id; });
+  navAs.forEach(a => {
+    const match = a.getAttribute('href') === '#' + cur;
+    a.classList.toggle('active', match);
+  });
+}, { passive: true });
+
+/* ────────────────────────────────────────────────────────────
+   HAMBURGER MENU
+──────────────────────────────────────────────────────────── */
+const hamburger   = document.getElementById('navHamburger');
+const mobOverlay  = document.getElementById('mobOverlay');
+const mobClose    = document.getElementById('mobOverlayClose');
+
+function openMenu()  { mobOverlay.classList.add('open');  hamburger.classList.add('open');  document.body.style.overflow = 'hidden'; }
+function closeMenu() { mobOverlay.classList.remove('open'); hamburger.classList.remove('open'); document.body.style.overflow = ''; }
+
+hamburger.addEventListener('click', openMenu);
+mobClose.addEventListener('click', closeMenu);
+mobOverlay.querySelectorAll('a').forEach(a => a.addEventListener('click', closeMenu));
+
+/* ────────────────────────────────────────────────────────────
+   FORM SUBMIT
+──────────────────────────────────────────────────────────── */
+const form = document.getElementById('contactForm');
+const succ = document.getElementById('formSuccess');
+form.addEventListener('submit', async function (e) {
+  e.preventDefault();
+  const btn = form.querySelector('button[type="submit"]');
+  btn.textContent = 'Envoi en cours...'; btn.disabled = true;
+  try {
+    const res = await fetch(form.action, {
+      method: 'POST', body: new FormData(form),
+      headers: { Accept: 'application/json' }
+    });
+    if (res.ok) { form.reset(); succ.style.display = 'block'; btn.textContent = 'Message envoyé ✓'; }
+    else { btn.textContent = 'Erreur — réessayer'; btn.disabled = false; }
+  } catch { btn.textContent = 'Erreur — réessayer'; btn.disabled = false; }
+});
+</script>
+</body>
+</html>

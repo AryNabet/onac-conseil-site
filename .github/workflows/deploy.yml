@@ -1,0 +1,43 @@
+name: Mise en ligne sur Gandi
+
+# À chaque fusion sur main (article validé), le site est reconstruit et envoyé sur l'hébergement Gandi.
+# Tourne aussi chaque matin à 7h (heure de Paris) pour publier les articles programmés à une date future.
+on:
+  push:
+    branches: [main]
+  schedule:
+    - cron: '0 5 * * *'
+  workflow_dispatch:
+
+concurrency:
+  group: deploy
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - run: npm ci
+      - run: npm run build
+
+      - name: Envoi SFTP vers Gandi
+        env:
+          HOST: ${{ secrets.GANDI_SFTP_HOST }}
+          USER: ${{ secrets.GANDI_SFTP_USER }}
+          PASS: ${{ secrets.GANDI_SFTP_TOKEN }}
+          DIR:  ${{ secrets.GANDI_REMOTE_DIR }}
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq lftp
+          # Pas de --delete : on ajoute/remplace, on ne supprime jamais rien sur le serveur.
+          lftp -u "$USER","$PASS" "sftp://$HOST" -e "
+            set sftp:auto-confirm yes;
+            set net:max-retries 3;
+            mirror --reverse --verbose --only-newer --no-perms dist/ $DIR;
+            bye"
