@@ -138,7 +138,7 @@ ${a.html}
   </article>
   <div class="bnote">Cet article a une vocation d'information générale et ne constitue pas un conseil personnalisé. Chaque situation étant particulière, contactez le cabinet pour une analyse adaptée à votre entreprise.</div>
   <div class="bcta">
-    <h2>Une question sur votre situation ?</h2>
+    <h2>${esc(a.cta || 'Une question sur votre situation ?')}</h2>
     <p>Premier échange confidentiel et sans engagement avec le cabinet.</p>
     <a class="btn-gold" href="/#contact">Prendre rendez-vous</a>
   </div>
