@@ -53,7 +53,7 @@ function parse(file) {
   if (!/^\d{4}-\d{2}-\d{2}$/.test(meta.date)) throw new Error(`${path.basename(file)} : date au format AAAA-MM-JJ attendue`);
   const slug = path.basename(file, '.md').replace(/^\d{4}-\d{2}-\d{2}-/, '');
   const words = m[2].split(/\s+/).filter(Boolean).length;
-  return { ...meta, slug, url: `/blog/${slug}/`, html: marked.parse(m[2]), minutes: Math.max(1, Math.round(words / 220)) };
+  return { ...meta, slug, url: `/blog/${slug}/`, html: marked.parse(m[2]).replace(/<table>/g, '<div class="table-wrap"><table>').replace(/<\/table>/g, '</table></div>'), minutes: Math.max(1, Math.round(words / 220)) };
 }
 
 const HEAD = ({ title, description, url, type = 'website', extra = '' }) => `<!DOCTYPE html>
@@ -88,10 +88,43 @@ ${extra}</head>
 </nav>
 `;
 
-const FOOT = `<footer class="bfoot">
-  <div>© ${new Date().getFullYear()} ${SITE_NAME} · Expert-Comptable · Paris 8e</div>
-  <div><a href="/">Accueil</a> · <a href="/blog/">Blog</a> · <a href="/feed.xml">RSS</a> · <a href="/#contact">Contact</a></div>
+const FOOT = `<footer>
+  <div class="footer-top">
+    <div class="footer-brand">
+      <div class="footer-logo">ONAC <span>Conseil</span></div>
+      <div class="footer-tagline">Expert-Comptable · Paris 8e · Depuis 1999</div>
+    </div>
+    <div class="footer-cols">
+      <div>
+        <div class="footer-col-title">Navigation</div>
+        <ul class="footer-col-links">
+          <li><a href="/#apropos">À propos</a></li>
+          <li><a href="/#services">Services</a></li>
+          <li><a href="/blog/">Blog</a></li>
+          <li><a href="/#contact">Contact</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-title">Coordonnées</div>
+        <div class="footer-col-text">
+          140 Boulevard Haussmann<br>
+          75008 Paris, France<br><br>
+          +33 6 13 41 70 32<br>
+          Olivier.nabet@onac-conseil.fr
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="footer-copy">© ${new Date().getFullYear()} ONAC Conseil · Tous droits réservés</div>
+    <div class="footer-legal">Expert-Comptable inscrit à l'Ordre des Experts-Comptables</div>
+  </div>
 </footer>
+<script>
+  const n = document.querySelector('.bnav');
+  const f = () => n.classList.toggle('scrolled', window.scrollY > 60);
+  window.addEventListener('scroll', f, { passive: true }); f();
+</script>
 </body>
 </html>
 `;
@@ -125,6 +158,8 @@ for (const a of posts) {
   const html = HEAD({ title: `${a.title} · ${SITE_NAME}`, description: a.description, url: a.url, type: 'article',
     extra: `<meta property="article:published_time" content="${a.date}">\n<script type="application/ld+json">${ld}</script>\n` }) + `
 <header class="bhead">
+  <div class="bhead-panel"></div>
+  <div class="bhead-orn"></div>
   <div class="bhead-inner">
     <div class="eyebrow">${esc(a.category || 'Actualité')}</div>
     <h1>${esc(a.title)}</h1>
@@ -150,19 +185,27 @@ ${a.html}
 }
 
 // Page liste
-const list = HEAD({ title: `Blog · ${SITE_NAME} – Expert-Comptable Paris`, description: 'Fiscalité, social, gestion : les analyses du cabinet ONAC Conseil pour les dirigeants et entrepreneurs.', url: '/blog/' }) + `
+const next = all.filter(a => !isPublished(a)).sort((a, b) => a.date.localeCompare(b.date))[0];
+const list = HEAD({ title: `Blog · ${SITE_NAME} – Expert-Comptable Paris`, description: 'Conjoncture, fiscalité, social, gestion : les analyses du cabinet ONAC Conseil pour les dirigeants et entrepreneurs.', url: '/blog/' }) + `
 <header class="bhead">
+  <div class="bhead-panel"></div>
+  <div class="bhead-orn"></div>
   <div class="bhead-inner">
     <div class="eyebrow">Le blog du cabinet</div>
     <h1>L'actualité qui compte pour <em>votre entreprise</em></h1>
-    <p>Fiscalité, social, gestion : chaque semaine, un point clair sur ce qui change pour les dirigeants et ce qu'il faut en retenir.</p>
+    <p>Conjoncture, fiscalité, social, gestion : chaque semaine, ce qui change pour les dirigeants et les solutions pour en tirer parti.</p>
   </div>
 </header>
-<section class="blist">
+<main class="blist">
   ${posts.length ? `<div class="blist-grid">
     ${posts.map(a => card(a)).join('\n    ')}
-  </div>` : `<p class="bempty">Les premiers articles arrivent très bientôt.</p>`}
-</section>
+  </div>` : `<div class="bempty">
+    <div class="bempty-decor"><div class="bempty-line"></div><div class="bempty-diamond"></div><div class="bempty-line"></div></div>
+    <h2>${next ? `Premier article le ${frDate(next.date)}` : 'Les premiers articles arrivent très bientôt'}</h2>
+    <p>Chaque mardi matin, une analyse de l'actualité économique et fiscale, et ce qu'elle change concrètement pour votre entreprise.</p>
+    <a class="btn-gold" href="/#contact">Échanger avec le cabinet</a>
+  </div>`}
+</main>
 ` + FOOT;
 fs.mkdirSync(path.join(DIST, 'blog'), { recursive: true });
 fs.writeFileSync(path.join(DIST, 'blog', 'index.html'), list);
