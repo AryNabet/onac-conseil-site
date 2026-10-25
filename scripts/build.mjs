@@ -56,14 +56,14 @@ function parse(file) {
   return { ...meta, slug, url: `/blog/${slug}/`, html: marked.parse(m[2]).replace(/<table>/g, '<div class="table-wrap"><table>').replace(/<\/table>/g, '</table></div>'), minutes: Math.max(1, Math.round(words / 220)) };
 }
 
-const HEAD = ({ title, description, url, type = 'website', extra = '' }) => `<!DOCTYPE html>
+const HEAD = ({ title, description, url, type = 'website', extra = '', section = 'blog', robots = '' }) => `<!DOCTYPE html>
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>${esc(title)}</title>
 <meta name="description" content="${esc(description)}">
-<link rel="canonical" href="${SITE_URL}${url}">
+${robots ? `<meta name="robots" content="${robots}">\n` : ''}<link rel="canonical" href="${SITE_URL}${url}">
 <meta property="og:type" content="${type}">
 <meta property="og:title" content="${esc(title)}">
 <meta property="og:description" content="${esc(description)}">
@@ -71,18 +71,17 @@ const HEAD = ({ title, description, url, type = 'website', extra = '' }) => `<!D
 <meta property="og:site_name" content="${SITE_NAME}">
 <meta property="og:locale" content="fr_FR">
 <link rel="alternate" type="application/rss+xml" title="Blog ${SITE_NAME}" href="/feed.xml">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/fonts/fonts.css">
 <link rel="stylesheet" href="/blog/blog.css">
 ${extra}</head>
 <body>
-<nav class="bnav">
+<a class="skip-link" href="#contenu">Aller au contenu</a>
+<nav class="bnav" aria-label="Navigation principale">
   <a href="/" class="bnav-logo">ONAC <span>Conseil</span></a>
   <ul class="bnav-links">
     <li class="hide-sm"><a href="/#apropos">À propos</a></li>
     <li class="hide-sm"><a href="/#services">Services</a></li>
-    <li class="hide-xs"><a href="/blog/" class="active">Blog</a></li>
+    <li class="hide-xs"><a href="/blog/"${section === 'blog' ? ' class="active" aria-current="page"' : ''}>Blog</a></li>
     <li><a href="/#contact" class="bnav-cta">Rendez-vous</a></li>
   </ul>
 </nav>
@@ -117,7 +116,7 @@ const FOOT = `<footer>
   </div>
   <div class="footer-bottom">
     <div class="footer-copy">© ${new Date().getFullYear()} ONAC Conseil · Tous droits réservés</div>
-    <div class="footer-legal">Expert-Comptable inscrit à l'Ordre des Experts-Comptables</div>
+    <div class="footer-legal">Expert-comptable inscrit à l'Ordre des experts-comptables · <a href="/mentions-legales/">Mentions légales</a> · <a href="/confidentialite/">Confidentialité</a> · <a href="/accessibilite/">Accessibilité</a></div>
   </div>
 </footer>
 <script>
@@ -167,7 +166,7 @@ for (const a of posts) {
     <div class="bhead-meta"><span>${frDate(a.date)}</span><span>${a.minutes} min de lecture</span><span>Par Olivier Nabet</span></div>
   </div>
 </header>
-<main class="barticle">
+<main class="barticle" id="contenu" tabindex="-1">
   <article class="prose">
 ${a.html}
   </article>
@@ -196,7 +195,7 @@ const list = HEAD({ title: `Blog · ${SITE_NAME} – Expert-Comptable Paris`, de
     <p>Conjoncture, fiscalité, social, gestion : chaque semaine, ce qui change pour les dirigeants et les solutions pour en tirer parti.</p>
   </div>
 </header>
-<main class="blist">
+<main class="blist" id="contenu" tabindex="-1">
   ${posts.length ? `<div class="blist-grid">
     ${posts.map(a => card(a)).join('\n    ')}
   </div>` : `<div class="bempty">
@@ -221,6 +220,44 @@ const latest = posts.length ? `<section class="section" id="blog">
 </section>` : '';
 const homePath = path.join(DIST, 'index.html');
 fs.writeFileSync(homePath, fs.readFileSync(homePath, 'utf8').replace('<!-- BLOG_LATEST -->', latest));
+
+// Polices auto-hébergées (aucun appel à Google Fonts : pas de transfert d'adresse IP hors UE)
+const FONT_DIR = path.join(DIST, 'fonts');
+fs.mkdirSync(FONT_DIR, { recursive: true });
+let fontCss = '';
+for (const [pkg, family, weights] of [
+  ['cormorant-garamond', 'Cormorant Garamond', [300, 400, 500, 600]],
+  ['dm-sans', 'DM Sans', [300, 400, 500]],
+]) {
+  for (const w of weights) for (const st of ['normal', 'italic']) {
+    const file = `${pkg}-latin-${w}-${st}.woff2`;
+    fs.copyFileSync(path.join(ROOT, 'node_modules', '@fontsource', pkg, 'files', file), path.join(FONT_DIR, file));
+    fontCss += `@font-face{font-family:'${family}';font-style:${st};font-weight:${w};font-display:swap;src:url(/fonts/${file}) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;}\n`;
+  }
+}
+fs.writeFileSync(path.join(FONT_DIR, 'fonts.css'), fontCss);
+
+// Pages légales (contenu : scripts/legal.mjs)
+const { LEGAL_PAGES } = await import('./legal.mjs');
+for (const pg of LEGAL_PAGES) {
+  const html = HEAD({ title: `${pg.title} · ${SITE_NAME}`, description: pg.description, url: pg.url, section: 'legal' }) + `
+<header class="bhead bhead-sm">
+  <div class="bhead-panel"></div>
+  <div class="bhead-inner">
+    <div class="eyebrow">Informations légales</div>
+    <h1>${pg.title}</h1>
+    <p>Dernière mise à jour : ${frDate(pg.updated)}</p>
+  </div>
+</header>
+<main class="barticle" id="contenu" tabindex="-1">
+  <article class="prose legal">
+${marked.parse(pg.body)}
+  </article>
+</main>
+` + FOOT;
+  fs.mkdirSync(path.join(DIST, pg.url), { recursive: true });
+  fs.writeFileSync(path.join(DIST, pg.url, 'index.html'), html);
+}
 
 // RSS (utilisé pour la publication LinkedIn)
 const rfc = d => new Date(d + 'T08:00:00Z').toUTCString();
@@ -269,6 +306,9 @@ fs.writeFileSync(path.join(DIST, 'sitemap.xml'), `<?xml version="1.0" encoding="
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>${SITE_URL}/</loc></url>
   <url><loc>${SITE_URL}/blog/</loc></url>
+  <url><loc>${SITE_URL}/mentions-legales/</loc></url>
+  <url><loc>${SITE_URL}/confidentialite/</loc></url>
+  <url><loc>${SITE_URL}/accessibilite/</loc></url>
 ${posts.map(a => `  <url><loc>${SITE_URL}${a.url}</loc><lastmod>${a.date}</lastmod></url>`).join('\n')}
 </urlset>
 `);

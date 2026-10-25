@@ -279,3 +279,36 @@ footer::before {
   .bnav-logo { font-size: 1.2rem; }
   .bnav-links li.hide-xs { display: none; }
 }
+
+/* ── Pages légales ───────────────────────────────────── */
+.bhead-sm { padding-bottom: 4rem; }
+.bhead-sm h1 { font-size: clamp(2.3rem, 4.4vw, 3.6rem); }
+.prose.legal { font-size: .98rem; }
+.prose.legal h2 { font-size: 1.75rem; margin-top: 2.8rem; padding-top: 2rem; }
+.prose.legal > h2:first-child { margin-top: 0; padding-top: 0; border-top: none; }
+.prose.legal > p:first-child { font-size: 1.04rem; }
+
+/* ── Accessibilité ───────────────────────────────────── */
+.skip-link {
+  position: fixed; top: -100px; left: 1rem; z-index: 1000;
+  background: var(--ink); color: #fff; padding: .9rem 1.4rem;
+  font-size: .8rem; letter-spacing: .08em; text-decoration: none;
+  border: 1px solid var(--gold-line); transition: top .2s;
+}
+.skip-link:focus { top: 1rem; }
+:focus-visible { outline: 2px solid var(--gold-line); outline-offset: 3px; }
+main:focus { outline: none; }
+.footer-legal a { color: inherit; text-decoration: underline; text-underline-offset: 2px; }
+.footer-legal a:hover { color: var(--gold-line); }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .01ms !important; animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important; scroll-behavior: auto !important;
+  }
+  .bhead-orn { display: none; }
+}
+
+/* Contrastes AA */
+.footer-tagline, .footer-col-title, .footer-copy, .footer-legal { color: rgba(255,255,255,.5); }
+.footer-col-text, .footer-col-links a { color: rgba(255,255,255,.62); }
+.bcard-read, .bback a, .bhead-meta, .bnote { color: rgba(255,255,255,.5); }

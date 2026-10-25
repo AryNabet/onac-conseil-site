@@ -8,6 +8,8 @@
     "build": "node scripts/build.mjs"
   },
   "dependencies": {
+    "@fontsource/cormorant-garamond": "^5.3.0",
+    "@fontsource/dm-sans": "^5.3.0",
     "marked": "^12.0.2"
   }
 }

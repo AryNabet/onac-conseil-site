@@ -5,9 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="ONAC Conseil — Cabinet d'expertise comptable indépendant à Paris. Accompagnement sur-mesure des dirigeants et entrepreneurs. Expert-Comptable inscrit à l'Ordre.">
 <title>ONAC Conseil – Expert-Comptable · Paris 8e</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/fonts/fonts.css">
 <style>
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -44,7 +42,7 @@ body {
   font-weight: 300;
   line-height: 1.7;
   overflow-x: hidden;
-  cursor: none;
+  
 }
 
 /* ══════════════════════════════════════════════════════════
@@ -107,7 +105,8 @@ body {
   transition: width .25s, height .25s, background .25s, border-color .25s;
   will-change: left,top;
 }
-#cur-dot {
+#cur-dot { display: none !important; }
+#cur-dot-unused {
   position: fixed; width: 5px; height: 5px;
   background: var(--gold); border-radius: 50%;
   pointer-events: none; z-index: 9999;
@@ -157,7 +156,7 @@ body {
 }
 .side-item {
   display: flex; align-items: center; gap: 1rem;
-  cursor: none; background: none; border: none; outline: none; padding: 0;
+   background: none; border: none; outline: none; padding: 0;
   transition: opacity .3s;
 }
 .side-label {
@@ -405,7 +404,7 @@ nav.scrolled .nav-cta { background: var(--gold); color: var(--white) !important;
   font-family: 'DM Sans', sans-serif;
   font-size: .72rem; font-weight: 500; letter-spacing: .2em;
   text-transform: uppercase; text-decoration: none;
-  border: none; cursor: none; position: relative; overflow: hidden;
+  border: none;  position: relative; overflow: hidden;
   transition: background .3s, box-shadow .3s;
 }
 .btn-gold::after {
@@ -422,7 +421,7 @@ nav.scrolled .nav-cta { background: var(--gold); color: var(--white) !important;
   font-family: 'DM Sans', sans-serif;
   font-size: .72rem; font-weight: 400; letter-spacing: .2em;
   text-transform: uppercase; text-decoration: none;
-  border: 1px solid var(--border-gold); cursor: none;
+  border: 1px solid var(--border-gold); 
   transition: border-color .3s, color .3s, background .3s;
 }
 .btn-outline:hover {
@@ -1100,12 +1099,50 @@ nav.scrolled .nav-hamburger span { background: var(--ink); }
 .latest-more { margin-top: 3rem; text-align: center; }
 @media (max-width: 1100px) { .latest-grid { grid-template-columns: 1fr 1fr; } }
 @media (max-width: 768px)  { .latest-grid { grid-template-columns: 1fr; } }
+
+/* ══════════════════════════════════════════════════════════
+   ACCESSIBILITÉ
+══════════════════════════════════════════════════════════ */
+.skip-link {
+  position: fixed; top: -100px; left: 1rem; z-index: 10001;
+  background: var(--ink); color: #fff; padding: .9rem 1.4rem;
+  font-size: .8rem; letter-spacing: .08em; text-decoration: none;
+  border: 1px solid var(--gold-line); transition: top .2s;
+}
+.skip-link:focus { top: 1rem; }
+:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+.hero :focus-visible, footer :focus-visible, .mob-overlay :focus-visible, .stats-bar :focus-visible { outline-color: var(--gold-line); }
+.form-group input:focus-visible, .form-group textarea:focus-visible, .form-group select:focus-visible {
+  outline: 2px solid var(--gold); outline-offset: 1px;
+}
+main:focus { outline: none; }
+.form-notice a, .footer-legal a { color: inherit; text-decoration: underline; text-underline-offset: 2px; }
+.footer-legal a:hover { color: var(--gold-line); }
+@media (hover: none), (pointer: coarse) { #cur-ring { display: none; } }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .01ms !important; animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important; scroll-behavior: auto !important;
+  }
+  #grain, #cur-ring, #hero-canvas { display: none !important; }
+  .reveal, .reveal-x, .ln-i { opacity: 1 !important; transform: none !important; }
+  .marquee-track { animation: none !important; }
+}
+
+/* Contrastes AA (texte informatif sur fond clair / sombre) */
+.eyebrow, .exp-label, .ptag, .service-num, .contact-label, .latest-card-meta { color: #86661D; }
+.eyebrow::before { background: #86661D; }
+.hero .eyebrow, .philosophie .eyebrow, .stats-bar .eyebrow { color: var(--gold-line); }
+.hero-card-role, .exp-yr, .form-notice { color: var(--stone); }
+.stat-label, .footer-tagline, .footer-col-title, .footer-copy, .footer-legal { color: rgba(255,255,255,.5); }
+.footer-col-text, .footer-col-links a { color: rgba(255,255,255,.62); }
 </style>
 </head>
 <body>
+<a class="skip-link" href="#contenu">Aller au contenu</a>
 
 <!-- LOADER -->
-<div id="loader">
+<div id="loader" aria-hidden="true">
   <div>
     <div class="loader-logo">ONAC <span>Conseil</span></div>
     <div class="loader-sub">Expert-Comptable · Paris</div>
@@ -1114,25 +1151,25 @@ nav.scrolled .nav-hamburger span { background: var(--ink); }
 </div>
 
 <!-- CURSOR -->
-<div id="cur-ring"></div>
-<div id="cur-dot"></div>
+<div id="cur-ring" aria-hidden="true"></div>
+<div id="cur-dot" aria-hidden="true"></div>
 
 <!-- PROGRESS -->
-<div id="prog"></div>
+<div id="prog" aria-hidden="true"></div>
 
 <!-- GRAIN -->
-<div id="grain"></div>
+<div id="grain" aria-hidden="true"></div>
 
 <!-- SIDE NAV -->
 <aside class="side-nav" aria-hidden="true">
-  <button class="side-item active" data-section="accueil"><span class="side-label">Accueil</span><span class="side-mark"></span></button>
-  <button class="side-item" data-section="apropos"><span class="side-label">À propos</span><span class="side-mark"></span></button>
-  <button class="side-item" data-section="services"><span class="side-label">Services</span><span class="side-mark"></span></button>
-  <button class="side-item" data-section="contact"><span class="side-label">Contact</span><span class="side-mark"></span></button>
+  <button tabindex="-1" class="side-item active" data-section="accueil"><span class="side-label">Accueil</span><span class="side-mark"></span></button>
+  <button tabindex="-1" class="side-item" data-section="apropos"><span class="side-label">À propos</span><span class="side-mark"></span></button>
+  <button tabindex="-1" class="side-item" data-section="services"><span class="side-label">Services</span><span class="side-mark"></span></button>
+  <button tabindex="-1" class="side-item" data-section="contact"><span class="side-label">Contact</span><span class="side-mark"></span></button>
 </aside>
 
 <!-- ═══ NAVIGATION ═══════════════════════════════════════════ -->
-<nav id="nav">
+<nav id="nav" aria-label="Navigation principale">
   <a href="#accueil" class="nav-logo">ONAC <span>Conseil</span></a>
   <ul class="nav-links">
     <li><a href="#apropos">À propos</a></li>
@@ -1141,19 +1178,18 @@ nav.scrolled .nav-hamburger span { background: var(--ink); }
     <li><a href="#contact">Contact</a></li>
     <li><a href="#contact" class="nav-cta">Prendre rendez-vous</a></li>
   </ul>
-  <button class="nav-hamburger" id="navHamburger" aria-label="Ouvrir le menu">
+  <button class="nav-hamburger" id="navHamburger" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="mobOverlay">
     <span></span><span></span><span></span>
   </button>
 </nav>
 
 <!-- ═══ MOBILE OVERLAY ════════════════════════════════════ -->
-<div class="mob-overlay" id="mobOverlay">
+<div class="mob-overlay" id="mobOverlay" role="dialog" aria-modal="true" aria-label="Menu">
   <a href="#accueil" class="mob-overlay-logo">ONAC <span>Conseil</span></a>
-  <button class="mob-overlay-close" id="mobOverlayClose" aria-label="Fermer">✕</button>
+  <button class="mob-overlay-close" id="mobOverlayClose" aria-label="Fermer le menu">✕</button>
   <ul class="mob-nav">
     <li><a href="#apropos">À propos</a></li>
     <li><a href="#services">Services</a></li>
-    <li><a href="#temoignages">Témoignages</a></li>
     <li><a href="/blog/">Blog</a></li>
     <li><a href="#contact">Contact</a></li>
   </ul>
@@ -1161,12 +1197,14 @@ nav.scrolled .nav-hamburger span { background: var(--ink); }
   <a href="#contact" class="mob-overlay-cta">Prendre rendez-vous</a>
 </div>
 
+<main id="contenu" tabindex="-1">
+
 <!-- ═══ HERO ══════════════════════════════════════════════════ -->
 <section class="hero" id="accueil">
-  <canvas id="hero-canvas"></canvas>
+  <canvas id="hero-canvas" aria-hidden="true"></canvas>
   <div class="hero-bg-rect"></div>
   <div class="hero-ornament-wrap"><div class="hero-ornament"></div></div>
-  <div class="hero-vert">Paris · France · Depuis 1999</div>
+  <div class="hero-vert" aria-hidden="true">Paris · France · Depuis 1999</div>
 
   <div class="hero-left">
     <div class="hero-eyebrow">Expert-Comptable — Paris 8e</div>
@@ -1195,14 +1233,14 @@ nav.scrolled .nav-hamburger span { background: var(--ink); }
     </div>
   </div>
 
-  <div class="hero-scroll" onclick="document.getElementById('stats').scrollIntoView({behavior:'smooth'})">
+  <div class="hero-scroll" aria-hidden="true" onclick="document.getElementById('stats').scrollIntoView({behavior:'smooth'})">
     <div class="hero-scroll-line"></div>
     <span>Défiler</span>
   </div>
 </section>
 
 <!-- ═══ MARQUEE ═══════════════════════════════════════════════ -->
-<div class="marquee">
+<div class="marquee" aria-hidden="true">
   <div class="marquee-track">
     <span class="marquee-item">Expertise Comptable</span><span class="marquee-sep">◆</span>
     <span class="marquee-item">Fiscalité &amp; Optimisation</span><span class="marquee-sep">◆</span>
@@ -1228,11 +1266,11 @@ nav.scrolled .nav-hamburger span { background: var(--ink); }
 <div class="stats-bar" id="stats">
   <div class="stats-inner">
     <div class="stat">
-      <div class="stat-num" data-count="25" data-prefix="+" data-suffix="">+25</div>
+      <div class="stat-num" data-count="25" aria-label="Plus de 25" data-prefix="+" data-suffix="">+25</div>
       <div class="stat-label">Années d'expérience</div>
     </div>
     <div class="stat">
-      <div class="stat-num" data-count="500" data-prefix="" data-suffix="+">500+</div>
+      <div class="stat-num" data-count="500" aria-label="Plus de 500" data-prefix="" data-suffix="+">500+</div>
       <div class="stat-label">Clients accompagnés</div>
     </div>
     <div class="stat">
@@ -1240,8 +1278,8 @@ nav.scrolled .nav-hamburger span { background: var(--ink); }
       <div class="stat-label">Inscrit à l'Ordre</div>
     </div>
     <div class="stat">
-      <div class="stat-num" data-count="100" data-prefix="" data-suffix="%">100%</div>
-      <div class="stat-label">Indépendant &amp; certifié</div>
+      <div class="stat-num">CAC</div>
+      <div class="stat-label">Commissaire aux comptes</div>
     </div>
   </div>
 </div>
@@ -1267,7 +1305,7 @@ nav.scrolled .nav-hamburger span { background: var(--ink); }
           <div class="exp-fill"></div>
         </div>
         <span class="exp-yr">2026</span>
-        <span class="exp-label">25 ans d'excellence</span>
+        <span class="exp-label">Plus de 25 ans d'expérience</span>
       </div>
     </div>
     <div class="reveal-x d2">
@@ -1275,7 +1313,7 @@ nav.scrolled .nav-hamburger span { background: var(--ink); }
         <div class="portrait-initial">ON</div>
         <div class="portrait-name">Olivier Nabet</div>
         <div class="portrait-title">Expert-Comptable &amp; Commissaire aux comptes</div>
-        <div class="portrait-bio">Expert-Comptable inscrit à l'Ordre des Experts-Comptables de Paris, Olivier Nabet accompagne depuis plus de 25 ans les dirigeants dans la gestion, l'optimisation et la croissance de leur entreprise. Son approche allie technicité juridique et fiscale à un conseil de proximité.</div>
+        <div class="portrait-bio">Expert-comptable inscrit au tableau de l'Ordre des experts-comptables de Paris Île-de-France, Olivier Nabet accompagne depuis plus de 25 ans les dirigeants dans la gestion, l'optimisation et la croissance de leur entreprise. Son approche allie technicité juridique et fiscale à un conseil de proximité.</div>
         <div class="portrait-tags">
           <span class="ptag">DEC</span>
           <span class="ptag">OEC</span>
@@ -1311,7 +1349,7 @@ nav.scrolled .nav-hamburger span { background: var(--ink); }
     <div class="service-card reveal d1" data-num="01">
       <div class="service-num">01</div>
       <div class="service-title">Comptabilité &amp; Tenue de comptes</div>
-      <div class="service-desc">Tenue et révision comptable, établissement des comptes annuels. Rigueur et ponctualité garanties.</div>
+      <div class="service-desc">Tenue et révision comptable, établissement des comptes annuels. Un suivi rigoureux, dans le respect de vos échéances.</div>
     </div>
     <div class="service-card reveal d2" data-num="02">
       <div class="service-num">02</div>
@@ -1341,35 +1379,6 @@ nav.scrolled .nav-hamburger span { background: var(--ink); }
   </div>
 </section>
 
-<!-- ═══ TÉMOIGNAGES ═══════════════════════════════════════════ -->
-<section class="section" id="temoignages">
-  <div class="eyebrow reveal">Témoignages</div>
-  <h2 class="section-heading reveal d1">La confiance de nos <em>clients</em></h2>
-  <div class="testi-grid">
-    <div class="testi-card reveal d2">
-      <div class="testi-open">"</div>
-      <p class="testi-text">Un accompagnement d'une grande rigueur et d'une disponibilité remarquable. Olivier Nabet comprend nos enjeux bien au-delà des chiffres — c'est un vrai partenaire stratégique.</p>
-      <div class="testi-sep"></div>
-      <div class="testi-name">Pierre Durand</div>
-      <div class="testi-role">Directeur Général · Durand Industries SAS</div>
-    </div>
-    <div class="testi-card reveal d3">
-      <div class="testi-open">"</div>
-      <p class="testi-text">Depuis que nous travaillons avec ONAC Conseil, notre gestion fiscale est optimisée et notre visibilité financière transformée. Un cabinet à la hauteur des grands enjeux.</p>
-      <div class="testi-sep"></div>
-      <div class="testi-name">Sophie Marchand</div>
-      <div class="testi-role">Fondatrice · Marchand &amp; Associés</div>
-    </div>
-    <div class="testi-card reveal d4">
-      <div class="testi-open">"</div>
-      <p class="testi-text">Réactivité, expertise et confidentialité absolue. ONAC Conseil nous a accompagnés lors d'une opération de cession complexe avec un professionnalisme exemplaire.</p>
-      <div class="testi-sep"></div>
-      <div class="testi-name">Marc Lefebvre</div>
-      <div class="testi-role">PDG · Groupe Lefebvre Conseil</div>
-    </div>
-  </div>
-</section>
-
 <!-- ═══ DERNIERS ARTICLES (généré par scripts/build.mjs) ═══ -->
 <!-- BLOG_LATEST -->
 
@@ -1390,12 +1399,12 @@ nav.scrolled .nav-hamburger span { background: var(--ink); }
         <h3>Envoyer un message</h3>
         <form id="contactForm" action="https://formspree.io/f/mnjgbooy" method="POST">
           <div class="form-row">
-            <div class="form-group"><label for="prenom">Prénom *</label><input type="text" id="prenom" name="prenom" required placeholder="Jean"></div>
-            <div class="form-group"><label for="nom">Nom *</label><input type="text" id="nom" name="nom" required placeholder="Dupont"></div>
+            <div class="form-group"><label for="prenom">Prénom *</label><input type="text" id="prenom" name="prenom" autocomplete="given-name" required placeholder="Jean"></div>
+            <div class="form-group"><label for="nom">Nom *</label><input type="text" id="nom" name="nom" autocomplete="family-name" required placeholder="Dupont"></div>
           </div>
-          <div class="form-group"><label for="email">Email *</label><input type="email" id="email" name="email" required placeholder="jean.dupont@email.com"></div>
-          <div class="form-group"><label for="telephone">Téléphone</label><input type="tel" id="telephone" name="telephone" placeholder="+33 6 00 00 00 00"></div>
-          <div class="form-group"><label for="societe">Société / Structure</label><input type="text" id="societe" name="societe" placeholder="Ma Société SAS"></div>
+          <div class="form-group"><label for="email">Email *</label><input type="email" id="email" name="email" autocomplete="email" required placeholder="jean.dupont@email.com"></div>
+          <div class="form-group"><label for="telephone">Téléphone</label><input type="tel" id="telephone" name="telephone" autocomplete="tel" placeholder="+33 6 00 00 00 00"></div>
+          <div class="form-group"><label for="societe">Société / Structure</label><input type="text" id="societe" name="societe" autocomplete="organization" placeholder="Ma Société SAS"></div>
           <div class="form-group">
             <label for="objet">Objet de la demande *</label>
             <select id="objet" name="objet" required>
@@ -1410,14 +1419,16 @@ nav.scrolled .nav-hamburger span { background: var(--ink); }
             </select>
           </div>
           <div class="form-group"><label for="message">Message *</label><textarea id="message" name="message" required placeholder="Décrivez brièvement votre situation ou votre besoin..."></textarea></div>
-          <p class="form-notice">* Champs obligatoires. Vos données sont traitées de manière confidentielle et ne sont jamais transmises à des tiers.</p>
-          <button type="submit" class="btn-gold mag" style="width:100%;cursor:none;">Envoyer le message</button>
-          <div class="form-success" id="formSuccess">✓ Votre message a bien été envoyé. Nous vous répondrons dans les meilleurs délais.</div>
+          <p class="form-notice">* Champs obligatoires. Les informations saisies sont utilisées par ONAC Conseil uniquement pour répondre à votre demande et ne sont ni vendues ni utilisées à des fins de prospection. Elles transitent par notre prestataire d'envoi de formulaires (Formspree). Vous disposez de droits d'accès, de rectification et d'effacement : voir notre <a href="/confidentialite/">politique de confidentialité</a>.</p>
+          <button type="submit" class="btn-gold mag" style="width:100%;">Envoyer le message</button>
+          <div class="form-success" id="formSuccess" role="status" aria-live="polite">✓ Votre message a bien été envoyé. Nous vous répondrons dans les meilleurs délais.</div>
         </form>
       </div>
     </div>
   </div>
 </section>
+
+</main>
 
 <!-- ═══ FOOTER ════════════════════════════════════════════════ -->
 <footer>
@@ -1432,8 +1443,7 @@ nav.scrolled .nav-hamburger span { background: var(--ink); }
         <ul class="footer-col-links">
           <li><a href="#apropos">À propos</a></li>
           <li><a href="#services">Services</a></li>
-          <li><a href="#temoignages">Témoignages</a></li>
-          <li><a href="/blog/">Blog</a></li>
+                <li><a href="/blog/">Blog</a></li>
           <li><a href="#contact">Contact</a></li>
         </ul>
       </div>
@@ -1450,7 +1460,7 @@ nav.scrolled .nav-hamburger span { background: var(--ink); }
   </div>
   <div class="footer-bottom">
     <div class="footer-copy">© 2026 ONAC Conseil · Tous droits réservés</div>
-    <div class="footer-legal">Expert-Comptable inscrit à l'Ordre des Experts-Comptables · Mentions légales</div>
+    <div class="footer-legal">Expert-comptable inscrit à l'Ordre des experts-comptables · <a href="/mentions-legales/">Mentions légales</a> · <a href="/confidentialite/">Confidentialité</a> · <a href="/accessibilite/">Accessibilité</a></div>
   </div>
 </footer>
 
@@ -1497,7 +1507,7 @@ document.addEventListener('mousemove', e => {
 })();
 
 // Enlarge on interactive
-document.querySelectorAll('a, button, .service-card, .value-pill, .ptag, .about-portrait, .testi-card').forEach(el => {
+document.querySelectorAll('a, button, .service-card, .value-pill, .ptag, .about-portrait').forEach(el => {
   el.addEventListener('mouseenter', () => ring.classList.add('big'));
   el.addEventListener('mouseleave', () => ring.classList.remove('big'));
 });
@@ -1530,6 +1540,7 @@ window.addEventListener('scroll', () =>
    HERO PARTICLES
 ──────────────────────────────────────────────────────────── */
 (function () {
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
   const canvas = document.getElementById('hero-canvas');
   const ctx = canvas.getContext('2d');
   let W, H, pts = [];
@@ -1712,8 +1723,16 @@ const hamburger   = document.getElementById('navHamburger');
 const mobOverlay  = document.getElementById('mobOverlay');
 const mobClose    = document.getElementById('mobOverlayClose');
 
-function openMenu()  { mobOverlay.classList.add('open');  hamburger.classList.add('open');  document.body.style.overflow = 'hidden'; }
-function closeMenu() { mobOverlay.classList.remove('open'); hamburger.classList.remove('open'); document.body.style.overflow = ''; }
+function openMenu()  {
+  mobOverlay.classList.add('open'); hamburger.classList.add('open'); document.body.style.overflow = 'hidden';
+  hamburger.setAttribute('aria-expanded', 'true'); mobClose.focus();
+}
+function closeMenu() {
+  if (!mobOverlay.classList.contains('open')) return;
+  mobOverlay.classList.remove('open'); hamburger.classList.remove('open'); document.body.style.overflow = '';
+  hamburger.setAttribute('aria-expanded', 'false'); hamburger.focus();
+}
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeMenu(); });
 
 hamburger.addEventListener('click', openMenu);
 mobClose.addEventListener('click', closeMenu);
