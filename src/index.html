@@ -1136,6 +1136,40 @@ main:focus { outline: none; }
 .hero-card-role, .exp-yr, .form-notice { color: var(--stone); }
 .stat-label, .footer-tagline, .footer-col-title, .footer-copy, .footer-legal { color: rgba(255,255,255,.5); }
 .footer-col-text, .footer-col-links a { color: rgba(255,255,255,.62); }
+
+/* Témoignage mis en avant */
+.testi-feature {
+  display: grid; grid-template-columns: minmax(240px, 1fr) 2fr; margin: 0;
+  background: var(--white); border: 1px solid var(--border); position: relative;
+}
+.testi-feature::before {
+  content: ''; position: absolute; top: -1px; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, var(--gold), var(--gold-shine), var(--gold));
+}
+.testi-acro {
+  list-style: none; background: var(--ink); padding: 3.2rem 2.8rem;
+  display: flex; flex-direction: column; justify-content: center; gap: 1.3rem;
+}
+.testi-acro li { display: flex; align-items: baseline; gap: 1.2rem; }
+.testi-letter {
+  font-family: 'Cormorant Garamond', serif; font-size: 2.6rem; font-weight: 500; line-height: 1;
+  width: 1.6rem; color: var(--gold-line);
+}
+.testi-word { font-size: .72rem; letter-spacing: .24em; text-transform: uppercase; color: rgba(255,255,255,.75); }
+.testi-body { padding: 3.6rem 3.6rem 3.2rem; }
+.testi-body .testi-text { font-size: 1.55rem; line-height: 1.6; margin-bottom: 2.2rem; }
+.testi-body .testi-open { color: #86661D; opacity: .5; }
+.testi-feature .testi-role { color: var(--stone); }
+.side-item.active .side-label { color: #86661D; }
+@media (max-width: 900px) {
+  .testi-feature { grid-template-columns: 1fr; }
+  .testi-acro { display: grid; grid-template-columns: 1fr; gap: .9rem; padding: 2rem 1.6rem; }
+  .testi-acro li { gap: .7rem; }
+  .testi-letter { font-size: 2rem; width: auto; }
+  .testi-word { font-size: .64rem; letter-spacing: .18em; }
+  .testi-body { padding: 2.4rem 1.6rem; }
+  .testi-body .testi-text { font-size: 1.3rem; }
+}
 </style>
 </head>
 <body>
@@ -1190,6 +1224,7 @@ main:focus { outline: none; }
   <ul class="mob-nav">
     <li><a href="#apropos">À propos</a></li>
     <li><a href="#services">Services</a></li>
+    <li><a href="#temoignages">Témoignage</a></li>
     <li><a href="/blog/">Blog</a></li>
     <li><a href="#contact">Contact</a></li>
   </ul>
@@ -1379,6 +1414,31 @@ main:focus { outline: none; }
   </div>
 </section>
 
+<!-- ═══ TÉMOIGNAGE ════════════════════════════════════════════ -->
+<section class="section" id="temoignages">
+  <div class="eyebrow reveal">Témoignage</div>
+  <h2 class="section-heading reveal d1">La parole à nos <em>clients</em></h2>
+  <figure class="testi-feature reveal d2">
+    <ul class="testi-acro" aria-label="ONAC, selon notre client">
+      <li><span class="testi-letter" aria-hidden="true">O</span><span class="testi-word">Organisation</span></li>
+      <li><span class="testi-letter" aria-hidden="true">N</span><span class="testi-word">Nécessaire</span></li>
+      <li><span class="testi-letter" aria-hidden="true">A</span><span class="testi-word">Accompagnement</span></li>
+      <li><span class="testi-letter" aria-hidden="true">C</span><span class="testi-word">Confiance</span></li>
+    </ul>
+    <div class="testi-body">
+      <div class="testi-open" aria-hidden="true">“</div>
+      <blockquote class="testi-text">
+        <p>Cela fait plus de 10 ans que je travaille avec ONAC Conseil et j’aurais pu multiplier les qualificatifs positifs. Rapide, efficace, professionnel et toujours à l’écoute… on est vraiment en confiance&nbsp;!</p>
+      </blockquote>
+      <div class="testi-sep" aria-hidden="true"></div>
+      <figcaption>
+        <div class="testi-name">Mathias O.</div>
+        <div class="testi-role">Client du cabinet depuis plus de 10 ans</div>
+      </figcaption>
+    </div>
+  </figure>
+</section>
+
 <!-- ═══ DERNIERS ARTICLES (généré par scripts/build.mjs) ═══ -->
 <!-- BLOG_LATEST -->
 
@@ -1443,7 +1503,8 @@ main:focus { outline: none; }
         <ul class="footer-col-links">
           <li><a href="#apropos">À propos</a></li>
           <li><a href="#services">Services</a></li>
-                <li><a href="/blog/">Blog</a></li>
+          <li><a href="#temoignages">Témoignage</a></li>
+          <li><a href="/blog/">Blog</a></li>
           <li><a href="#contact">Contact</a></li>
         </ul>
       </div>
