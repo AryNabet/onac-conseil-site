@@ -1161,6 +1161,19 @@ main:focus { outline: none; }
 .testi-body .testi-open { color: #86661D; opacity: .5; }
 .testi-feature .testi-role { color: var(--stone); }
 .side-item.active .side-label { color: #86661D; }
+.testi-second {
+  margin: 2rem 0 0 calc(33.333% + 0px); background: var(--white); border: 1px solid var(--border);
+  padding: 2.8rem 3.6rem; display: grid; grid-template-columns: auto 1fr; column-gap: 1.6rem; align-items: start;
+}
+.testi-second .testi-open { color: #86661D; opacity: .5; margin: 0; font-size: 3.4rem; }
+.testi-second .testi-text { font-size: 1.3rem; line-height: 1.6; margin-bottom: 1.4rem; }
+.testi-second figcaption { grid-column: 2; }
+.testi-second .testi-role { color: var(--stone); }
+@media (max-width: 900px) {
+  .testi-second { margin-left: 0; padding: 2.2rem 1.6rem; grid-template-columns: 1fr; }
+  .testi-second figcaption { grid-column: 1; }
+  .testi-second .testi-text { font-size: 1.2rem; }
+}
 @media (max-width: 900px) {
   .testi-feature { grid-template-columns: 1fr; }
   .testi-acro { display: grid; grid-template-columns: 1fr; gap: .9rem; padding: 2rem 1.6rem; }
@@ -1224,7 +1237,7 @@ main:focus { outline: none; }
   <ul class="mob-nav">
     <li><a href="#apropos">À propos</a></li>
     <li><a href="#services">Services</a></li>
-    <li><a href="#temoignages">Témoignage</a></li>
+    <li><a href="#temoignages">Témoignages</a></li>
     <li><a href="/blog/">Blog</a></li>
     <li><a href="#contact">Contact</a></li>
   </ul>
@@ -1416,7 +1429,7 @@ main:focus { outline: none; }
 
 <!-- ═══ TÉMOIGNAGE ════════════════════════════════════════════ -->
 <section class="section" id="temoignages">
-  <div class="eyebrow reveal">Témoignage</div>
+  <div class="eyebrow reveal">Témoignages</div>
   <h2 class="section-heading reveal d1">La parole à nos <em>clients</em></h2>
   <figure class="testi-feature reveal d2">
     <ul class="testi-acro" aria-label="ONAC, selon notre client">
@@ -1436,6 +1449,16 @@ main:focus { outline: none; }
         <div class="testi-role">Client du cabinet depuis plus de 10 ans</div>
       </figcaption>
     </div>
+  </figure>
+  <figure class="testi-second reveal d3">
+    <div class="testi-open" aria-hidden="true">“</div>
+    <blockquote class="testi-text">
+      <p>ONAC Conseil est un cabinet de haute confiance. On se sent entre de bonnes mains, avec un accompagnement d’une grande qualité. Je le recommande sans hésiter.</p>
+    </blockquote>
+    <figcaption>
+      <div class="testi-name">HHAcademy</div>
+      <div class="testi-role">Cliente du cabinet</div>
+    </figcaption>
   </figure>
 </section>
 
@@ -1503,7 +1526,7 @@ main:focus { outline: none; }
         <ul class="footer-col-links">
           <li><a href="#apropos">À propos</a></li>
           <li><a href="#services">Services</a></li>
-          <li><a href="#temoignages">Témoignage</a></li>
+          <li><a href="#temoignages">Témoignages</a></li>
           <li><a href="/blog/">Blog</a></li>
           <li><a href="#contact">Contact</a></li>
         </ul>
