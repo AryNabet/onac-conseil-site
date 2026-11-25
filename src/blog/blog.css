@@ -312,3 +312,24 @@ main:focus { outline: none; }
 .footer-tagline, .footer-col-title, .footer-copy, .footer-legal { color: rgba(255,255,255,.5); }
 .footer-col-text, .footer-col-links a { color: rgba(255,255,255,.62); }
 .bcard-read, .bback a, .bhead-meta, .bnote { color: rgba(255,255,255,.5); }
+
+/* ── Lisibilité renforcée (texte plus grand et plus clair) ── */
+.bhead p { color: rgba(255,255,255,.86); font-size: 1.15rem; line-height: 1.85; max-width: 640px; }
+.bhead-meta {
+  font-size: .8rem; letter-spacing: .14em; color: rgba(255,255,255,.82);
+  gap: .7rem 2.4rem; max-width: 640px;
+}
+.bhead-meta span:first-child { color: var(--gold-line); font-weight: 500; }
+.prose { color: rgba(255,255,255,.88); font-size: 1.12rem; }
+.prose > p:first-child { color: #fff; font-size: 1.2rem; }
+.bcard-desc { color: rgba(255,255,255,.75); font-size: .95rem; }
+.bcard-meta { font-size: .68rem; }
+.bcard-read { color: rgba(255,255,255,.7); }
+.bnote { color: rgba(255,255,255,.65); font-size: .86rem; }
+.bback a { color: rgba(255,255,255,.7); }
+@media (max-width: 768px) {
+  .bhead p { font-size: 1.05rem; }
+  .bhead-meta { font-size: .74rem; gap: .5rem 1.4rem; }
+  .prose { font-size: 1.05rem; }
+  .prose > p:first-child { font-size: 1.12rem; }
+}
