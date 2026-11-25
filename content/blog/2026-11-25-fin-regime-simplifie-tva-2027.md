@@ -30,7 +30,8 @@ Pour une entreprise dont l'exercice correspond à l'année civile :
 
 - **Jusqu'au 31 décembre 2026** : les règles habituelles du régime simplifié s'appliquent.
 - **À partir du 1er janvier 2027** : la TVA est déclarée sur CA3, chaque trimestre ou chaque mois selon votre chiffre d'affaires. La première CA3 porte sur le premier trimestre 2027 (ou sur janvier 2027 en cas de déclaration mensuelle).
-- **Avril 2027** : dépôt de la première CA3 trimestrielle, qui porte sur janvier à mars 2027.
+- **Février 2027** : dépôt de la première CA3 mensuelle, qui porte sur le mois de janvier 2027.
+- **Avril 2027** : dépôt de la première CA3 trimestrielle, qui porte sur la période de janvier à mars 2027.
 - **Au plus tard le 4 mai 2027** : dépôt de la **dernière CA12**, qui solde la TVA de l'année 2026.
 
 Pour un exercice décalé, la bascule intervient après la clôture de l'exercice 2026/2027 : le calendrier est à examiner au cas par cas.
